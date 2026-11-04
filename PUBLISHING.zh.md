@@ -27,11 +27,11 @@ As of 2026-11-04:
   preserves history, `v0.1.0`, the topic, and the creation date; the old URL
   redirects.
 - The working tree, `package.json`, README, catalog YAML, and PR body point at
-  `dustcpu/dsh-geometric-splash`; the prepared commit is ready to push.
-- npm CLI is authenticated as `dusttttt`; the first `npm publish` attempt was
-  blocked by npm's 2FA policy (`E403: Two-factor authentication or granular
-  access token with bypass 2fa enabled is required`). `dsh-splash` is **not
-  published yet**; the name is still free.
+  `dustcpu/dsh-geometric-splash`; `main` and the prepared commit are pushed.
+- npm CLI is authenticated as `dusttttt`; 2FA is now enabled with
+  `"mode": "auth-and-writes"`. Publishing therefore requires a one-time code
+  from the authenticator. `dsh-splash` is **not published yet**; the name is
+  still free.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
@@ -43,8 +43,8 @@ As of 2026-11-04:
 
 Next:
 
-- Push the rename commit and publish npm (the agent can do both once the remote
-  points at the new name).
+- Publish npm from an interactive terminal and enter the OTP, or use a granular
+  token with bypass 2FA.
 - Confirm the repository is **public**, and keep the **`dsh-plugin`** topic.
 - When you decide to list, fork `awesome-dsh-plugin` and open the one-file PR
   with the prepared YAML.
@@ -132,24 +132,22 @@ npm publish --access public
 Do not publish build output that is missing: `lib/client.js` is the browser half
 and must be in the tarball. `package.json` `files` already lists it.
 
-### This account: npm publish is blocked by the 2FA policy
+### npm publish and 2FA
 
-`npm profile get` reports `"tfa": false`, but npm still refuses to publish with
-the web-login session token:
+2FA is now enabled on the npm account with `"mode": "auth-and-writes"`. The
+agent's shell is non-interactive, so it cannot type the one-time code at the
+`Enter OTP:` prompt. Run the publish in your own terminal:
 
-```text
-E403: Two-factor authentication or granular access token with bypass 2fa enabled
-is required to publish packages.
+```powershell
+cd C:\Users\Lenovo\Documents\deepseek-harness\default-workspace\dsh-splash
+npm publish --access public
+# Enter OTP: <the 6-digit code from your authenticator>
 ```
 
-That is a first-publish policy, not a name conflict. Pick one:
+If your PowerShell blocks `npm.ps1`, use `npm.cmd publish --access public`.
 
-**Option A — enable 2FA and publish from your terminal.** In npmjs.com →
-Account → Security, enable 2FA. Then run `npm publish --access public` in your
-own terminal and enter the one-time code when prompted.
-
-**Option B — a granular access token with bypass 2FA.** In npmjs.com →
-Access Tokens → Generate New Token → **Granular Access Token**:
+Alternative: create a **granular access token with bypass 2FA** (npmjs.com →
+Access Tokens → Generate New Token → Granular Access Token):
 
 - Packages: allow `dsh-splash` (or all packages) with **read and write**.
 - Enable **Bypass 2FA** / "allow this token to bypass 2FA".
@@ -166,7 +164,7 @@ npm publish --access public
 `.npmrc` is already in `.gitignore`; never commit the token, never paste it into
 chat, and revoke it after publishing if you do not need it.
 
-**Option C — skip npm.** The market listing works with a GitHub install:
+You can also skip npm entirely: the market listing works with a GitHub install,
 `dsh plugin --profile web add github:dustcpu/dsh-geometric-splash`. npm only
 adds the download figure and npm-based installation.
 
