@@ -8,10 +8,16 @@
   clamped by real readiness, so the bar keeps moving yet only reaches 100 when
   startup actually completes; **Real** mode keeps the raw milestone bar. The
   "Entering" stage covers the gap between app-ready and intro-end.
-- Theme entry in `conversation.session.header.utilities`: an inline palette icon in the conversation header (no overlay over the sidebar avatar), plus a **Theme** button during the splash;
-  ten palettes derived from `E:\mv-refs\palette.json` (swamp, warm gold, teal,
+- Theme entry in `conversation.session.header.utilities`: a rotating Penrose
+  icon in the conversation header (hover highlights it and speeds up the spin;
+  no overlay over the sidebar avatar), plus a **Theme** button during the splash.
+  Ten palettes derived from `E:\mv-refs\palette.json` (swamp, warm gold, teal,
   sunset, dark room) and `E:\web\Geometric Islands\style.css` (blue, green,
   amber, purple, night). Palette and pacing changes apply live during the intro.
+- Theme panel stays open after palette, duration, progress-mode, reset, and
+  preview actions; preview temporarily hides the panel and restores it. Intro
+  buttons read **短 / 标准 / 长** (no seconds), and the progress labels are
+  localized instead of raw locale keys.
 - Palette-aware ocean canvas and Penrose light sweep; stronger ocean grid
   contrast.
 - Settings persisted in `localStorage` (`dsh-splash:settings`), with a live
