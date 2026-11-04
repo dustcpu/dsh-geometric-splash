@@ -28,7 +28,10 @@ As of 2026-11-04:
   redirects.
 - The working tree, `package.json`, README, catalog YAML, and PR body point at
   `dustcpu/dsh-geometric-splash`; the prepared commit is ready to push.
-- npm CLI is authenticated as `dusttttt`; `dsh-splash` is **not published yet**.
+- npm CLI is authenticated as `dusttttt`; the first `npm publish` attempt was
+  blocked by npm's 2FA policy (`E403: Two-factor authentication or granular
+  access token with bypass 2fa enabled is required`). `dsh-splash` is **not
+  published yet**; the name is still free.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
@@ -128,6 +131,52 @@ npm publish --access public
 
 Do not publish build output that is missing: `lib/client.js` is the browser half
 and must be in the tarball. `package.json` `files` already lists it.
+
+### This account: npm publish is blocked by the 2FA policy
+
+`npm profile get` reports `"tfa": false`, but npm still refuses to publish with
+the web-login session token:
+
+```text
+E403: Two-factor authentication or granular access token with bypass 2fa enabled
+is required to publish packages.
+```
+
+That is a first-publish policy, not a name conflict. Pick one:
+
+**Option A — enable 2FA and publish from your terminal.** In npmjs.com →
+Account → Security, enable 2FA. Then run `npm publish --access public` in your
+own terminal and enter the one-time code when prompted.
+
+**Option B — a granular access token with bypass 2FA.** In npmjs.com →
+Access Tokens → Generate New Token → **Granular Access Token**:
+
+- Packages: allow `dsh-splash` (or all packages) with **read and write**.
+- Enable **Bypass 2FA** / "allow this token to bypass 2FA".
+- Set a short expiry, create it, and copy the token.
+
+Set it in the **user** npm config (not this repo), then publish:
+
+```powershell
+npm config set //registry.npmjs.org/:_authToken=<token>
+npm whoami
+npm publish --access public
+```
+
+`.npmrc` is already in `.gitignore`; never commit the token, never paste it into
+chat, and revoke it after publishing if you do not need it.
+
+**Option C — skip npm.** The market listing works with a GitHub install:
+`dsh plugin --profile web add github:dustcpu/dsh-geometric-splash`. npm only
+adds the download figure and npm-based installation.
+
+After publishing:
+
+```powershell
+npm view dsh-splash version
+```
+
+should print `0.1.0`.
 
 ### Updating later
 
