@@ -28,26 +28,26 @@ As of 2026-11-04:
   redirects.
 - The working tree, `package.json`, README, catalog YAML, and PR body point at
   `dustcpu/dsh-geometric-splash`; `main` and the prepared commit are pushed.
-- npm CLI is authenticated as `dusttttt`; 2FA is now enabled with
-  `"mode": "auth-and-writes"`. Publishing therefore requires a one-time code
-  from the authenticator. `dsh-splash` is **not published yet**; the name is
-  still free.
+- npm CLI is authenticated as `dusttttt`; 2FA is enabled with
+  `"mode": "auth-and-writes"`. **`dsh-splash@0.1.0` is published** (latest,
+  2026-11-04T05:05Z); `npm view dsh-splash version` returns `0.1.0`, and the
+  package's `repository` points at `dustcpu/dsh-geometric-splash`.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
   [market/dustcpu__dsh-geometric-splash.yml](market/dustcpu__dsh-geometric-splash.yml),
   [market/PR-body.md](market/PR-body.md).
 - **Catalog submission is intentionally deferred.** The repository can stay
-  public and the npm package can be published without listing it; open the
+  public and the npm package is already published without listing it; open the
   catalog PR whenever you are ready (after the 24-hour age gate).
 
 Next:
 
-- Publish npm from an interactive terminal and enter the OTP, or use a granular
-  token with bypass 2FA.
 - Confirm the repository is **public**, and keep the **`dsh-plugin`** topic.
 - When you decide to list, fork `awesome-dsh-plugin` and open the one-file PR
   with the prepared YAML.
+- For future code changes, publish a new npm version (`0.1.1` / `0.2.0`); do not
+  try to overwrite `0.1.0`.
 
 ## 0. What the reviewer needs to see
 
@@ -134,17 +134,24 @@ and must be in the tarball. `package.json` `files` already lists it.
 
 ### npm publish and 2FA
 
-2FA is now enabled on the npm account with `"mode": "auth-and-writes"`. The
-agent's shell is non-interactive, so it cannot type the one-time code at the
-`Enter OTP:` prompt. Run the publish in your own terminal:
+2FA is enabled on the npm account with `"mode": "auth-and-writes"`. This account
+uses a **security key / passkey**, not a TOTP authenticator: `npm publish` prints
+a CLI authentication URL and waits. Press Enter, complete the Windows Hello /
+security-key prompt in the browser, then return to the terminal.
 
 ```powershell
 cd C:\Users\Lenovo\Documents\deepseek-harness\default-workspace\dsh-splash
 npm publish --access public
-# Enter OTP: <the 6-digit code from your authenticator>
+# Press ENTER, then complete the security-key prompt in the browser
 ```
 
 If your PowerShell blocks `npm.ps1`, use `npm.cmd publish --access public`.
+
+The registry processes a new package asynchronously. The first `0.1.0` publish
+returned `PUT 202` and briefly created a `0.0.0-stage` placeholder; about four
+minutes later `0.1.0` became `latest`. If you see the placeholder linger in the
+version list, it is harmless — `npm view dsh-splash version` and
+`npm view dsh-splash dist-tags` are the source of truth.
 
 Alternative: create a **granular access token with bypass 2FA** (npmjs.com →
 Access Tokens → Generate New Token → Granular Access Token):
