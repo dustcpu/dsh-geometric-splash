@@ -25,6 +25,7 @@ class FakeElement {
     this._html = ''
     this.width = 0
     this.height = 0
+    this.listeners = Object.create(null)
   }
   set textContent(value) { this._text = String(value) }
   get textContent() { return this._text }
@@ -45,6 +46,21 @@ class FakeElement {
   remove() { if (this.parentNode) this.parentNode.removeChild(this) }
   setAttribute(name, value) { this.attributes.set(name, String(value)) }
   getAttribute(name) { return this.attributes.has(name) ? this.attributes.get(name) : null }
+  addEventListener(type, fn) {
+    if (this.listeners[type] === undefined) this.listeners[type] = []
+    this.listeners[type].push(fn)
+  }
+  removeEventListener(type, fn) {
+    const list = this.listeners[type]
+    if (list === undefined) return
+    const index = list.indexOf(fn)
+    if (index >= 0) list.splice(index, 1)
+  }
+  dispatch(type, event = {}) {
+    const list = this.listeners[type]
+    if (list === undefined) return
+    for (const fn of [...list]) fn({ target: this, ...event })
+  }
   getBoundingClientRect() { return { x: 0, y: 0, width: 380, height: 380, top: 0, left: 0, right: 380, bottom: 380 } }
   getContext() { return CANVAS_CONTEXT }
   querySelector(selector) { return query(this, selector) }
@@ -150,6 +166,7 @@ const window = {
   addEventListener() {},
   removeEventListener() {},
   matchMedia: () => ({ matches: false }),
+  __DSH_SPLASH__: { minVisibleMs: 2000 },
   __ModuleLoader__: {
     load(registration) { window.__registration = registration }
   }
@@ -241,6 +258,7 @@ const services = {
 }
 
 let capturedComponent = null
+const capturedComponents = {}
 const ctx = {
   get: (name) => services[name],
   loader: { entries: () => entries },
@@ -248,7 +266,11 @@ const ctx = {
   effect(fn) { return fn() },
   slots: {
     inject: (_name, register) => register(),
-    register(_options, component) { capturedComponent = component; return () => {} }
+    register(options, component) {
+      capturedComponents[options.id] = component
+      capturedComponent = component
+      return () => {}
+    }
   }
 }
 
@@ -269,6 +291,21 @@ body.appendChild(bootPage)
 module.apply(ctx)
 const splash = document.querySelector('.dsh-splash')
 assert.ok(splash, 'cold boot paints the splash')
+
+// The persistent theme dock is an independent overlay entry; mount it with the
+// same fake React seat to exercise its imperative DOM builder.
+assert.ok(capturedComponents['dsh-splash-theme'], 'theme dock registered')
+const dockHost = new FakeElement('div')
+body.appendChild(dockHost)
+pendingEffects.length = 0
+const dockSeat = capturedComponents['dsh-splash-theme']()
+dockHost.appendChild(dockSeat)
+for (const effect of pendingEffects.splice(0)) effect()
+const dock = document.querySelector('.dsh-splash-dock')
+assert.ok(dock, 'theme dock mounted')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__preset').length, 10, 'all palettes are listed')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 3, 'three intro lengths are listed')
+assert.ok(document.querySelector('style[data-plugin-css="dsh-splash/dock.css"]'), 'dock stylesheet exists')
 assert.equal(splash.parentNode, body)
 assert.ok(capturedComponent, 'shell.overlay seat registered while booting')
 
@@ -321,5 +358,13 @@ for (let i = 1; i < samples.length; i += 1) {
 assert.equal(samples[samples.length - 1], 100, `displayed progress reaches 100 before removal (got ${samples[samples.length - 1]})`)
 assert.equal(seat.style.display, 'none', 'seat hidden after completion')
 assert.equal(document.querySelector('style[data-plugin-css="dsh-splash/style.css"]'), null, 'owned stylesheet removed')
+
+// The theme dock's preview button must paint a second, self-disposing splash.
+const previewButton = dock.querySelector('.dsh-splash-dock__preview')
+assert.ok(previewButton, 'preview button exists')
+previewButton.dispatch('click')
+assert.ok(document.querySelector('.dsh-splash'), 'theme preview paints a splash')
+await waitFor(() => document.querySelector('.dsh-splash') === null, 7000, 'theme preview fade-out')
+console.log('ok: theme preview lifecycle complete')
 
 console.log(`ok: ${samples.length} progress samples, monotonic, splash lifecycle complete (peak ${samples[samples.length - 1]}%)`)

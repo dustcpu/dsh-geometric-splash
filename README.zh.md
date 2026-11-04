@@ -2,16 +2,26 @@
 
 <p align="center"><img src="assets/icon-512.png" width="128" alt="dsh-splash icon"></p>
 
-DSH 启动开屏插件：彭罗斯三角在等距菱格海面上旋转受光，底部进度条读取 **真实启动进度**，启动完成后淡出。
+DSH 启动开屏插件：彭罗斯三角在等距菱格海面上旋转受光，进度条读取 **真实启动进度**；默认 7.2 秒的可跳过开屏，附带 10 套主题色板。
 
 视觉测试台：`preview/preview.html?mode=static`（用真实 bundle 跑假服务，可直接用浏览器打开）。
 
-## 效果保持
+## 效果与交互
 
-- 彭罗斯三角 24s 一圈旋转，三块面做 24s 循环受光（`#f1a2aa → #8f5f94 → #d4869b`）。
-- 圆形框内是等距菱格海面：双正弦波位移网格，按平均高度混合浅色/粉色并描紫色细线。
-- 圆形框 1.6s 弹入、品牌区 1.2s 延迟淡入，全部沿用原型的曲线与时长。
-- 启动完成后 640ms 淡出，释放 canvas、样式与计时器。
+- 彭罗斯三角 24s 一圈旋转，三块面做 24s 循环受光；海面是双正弦波位移的等距菱格。
+- 默认 **7.2s** 固定开屏时间线（可选 3.8s / 10s），不是“等 DSH 启动完就立刻消失”；右下角有**跳过**按钮，`Esc` 也可以提前退出。
+- 启动进度仍然是真实的（见下一节）；时间线只决定“至少展示多久”，不会伪造百分比。
+- 圆形框在时间线内缓慢推近，带柔光呼吸；启动完成后 640ms 淡出，释放 canvas、样式与计时器。
+- **主题坞**：主界面右下角的小调色盘按钮，提供 10 套色板、停留时长、**预览开屏**；选择保存在本地，下一次开屏生效。
+
+## 主题与色板
+
+主题坞里的色板来自你的两个参考目录：
+
+- **Monument Valley**（`E:\mv-refs\palette.json`）：沼泽（默认）、暖金塔楼、青绿框架、橙粉云海、暗室三窗。
+- **Geometric Islands**（`E:\web\Geometric Islands\style.css`）：岛屿蓝、岛屿绿、岛屿琥珀、岛屿紫、岛屿夜。
+
+每套色板同时驱动背景、圆框、进度条、文字、海面格子和彭罗斯三面的受光；暗色主题也做了对应的文字/边框对比。主题保存在 `localStorage`（`dsh-splash:settings`），不写宿主配置，也不跨设备同步。
 
 ## 真实进度，不是假进度
 
@@ -26,6 +36,8 @@ DSH 启动开屏插件：彭罗斯三角在等距菱格海面上旋转受光，�
 | 首帧与字体 | 10 | 挂载后的两帧 rAF + `document.fonts.ready`（最多等 800ms） |
 
 没有任何“按时间跑百分比”的逻辑。显示值只对目标值做视觉缓动（`1 - e^(-dt/110)`），目标值本身完全来自上述状态；阶段文案会显示 `正在载入插件 37/94` 这类真实计数。
+
+**开屏时长和进度是两件事**：7.2s 是“至少展示”的固定时间线，进度条仍然只反映真实启动；启动很快时进度会先到 100 并在时间线里继续播放推近/柔光，启动很慢时则以真实完成为准继续等待。跳过按钮随时可以提前结束。
 
 因为 `shell.overlay` 只在 React 应用挂载后才存在，插件在 `apply` 阶段先把自己的 DOM 画到 `document.body` 上（盖住内核自带的 “Loading plugins…” 启动页），等 `shell.overlay` 的 seat 挂载后，把**同一个 DOM 节点**重新挂到 seat 里，视觉上零闪烁。这样启动前半程（插件图装载）也能显示真实进度。
 
@@ -52,6 +64,8 @@ DSH 的 HMR 会监听 profile patch 的变化并重组；浏览器端通过 `/pl
 ```powershell
 dsh plugin --profile desktop add dsh-splash
 ```
+
+截至 2026-11-04，npm `latest` 是 **0.1.0**；0.2.0 的长开屏与主题坞目前是本地 `link:` 开发版，确认效果后再发布。发布后这条命令就会拿到新版。
 
 如果通过 DSH 插件市场安装，包的 `cordis.patch.yml` 会插入同样的 row，无需手写。
 
@@ -87,7 +101,7 @@ dsh-splash/
 node test/dom-smoke.mjs
 ```
 
-会用 Node 的 DOM 仿真执行真实的 `lib/client.js`，验证冷启动检测、真实 loader 计数、进度单调、`shell.overlay` adopt、淡出与清理。`preview/preview.html?mode=static` 是纯前端视觉测试台（真实 bundle + 假服务），可直接用浏览器打开。
+会用 Node 的 DOM 仿真执行真实的 `lib/client.js`，验证冷启动检测、真实 loader 计数、进度单调、`shell.overlay` adopt、淡出与清理，以及主题坞的 10 套色板 / 3 种时长和“预览开屏”生命周期。`preview/preview.html?mode=static` 是纯前端视觉测试台（真实 bundle + 假服务），可直接用浏览器打开。
 
 ## 配置
 
@@ -97,10 +111,11 @@ node test/dom-smoke.mjs
 |---|---|
 | `?dsh-splash=off` | 本次不显示 |
 | `?dsh-splash=force` | 即使页面已经挂载也显示（用于开发） |
-| `?dsh-splash-min=800` | 最短展示时间（毫秒），默认 2000 |
-| `window.__DSH_SPLASH__ = { minVisibleMs, force, disabled, debug }` | 脚本注入方式 |
+| `?dsh-splash-min=3800` | 本次开屏最短展示时间（毫秒），默认 7200 |
+| `?dsh-splash-palette=island-night` | 本次强制使用某套色板 |
+| `window.__DSH_SPLASH__ = { minVisibleMs, palette, force, disabled, debug }` | 脚本注入方式 |
 
-`minVisibleMs` 只影响“已经 100% 后还停留多久”，不会伪造进度；如果真实启动耗时超过它，就以真实完成为准立即淡出。
+`minVisibleMs` 只影响“已完成后还停留多久”，不会伪造进度；如果真实启动耗时超过它，就以真实完成为准立即淡出。正常用户通过右下角主题坞修改，不需要手写 query。
 
 ## 已知边界
 
@@ -108,6 +123,8 @@ node test/dom-smoke.mjs
 - 首次加载后 `shell.overlay` 才存在，所以采用“先画到 body，再 adopt 进 seat”的两段式；如果布局插件重载导致 seat 消失，会把节点放回 body，不会丢画面。
 - 启动失败时最多覆盖 20s，然后淡出，避免把错误页永久盖住；进度条不会假报 100%。
 - 依赖 `ctx.loader.entries()`、`ctx.connection`、`workspaces`/`sessions` 服务；任何一项缺失都会在短暂宽限后按“能力不存在”跳过该阶段，而不是卡死。
+- 7.2s 是**默认**时间线，不是强制；主题坞可改 3.8/7.2/10s，右下角按钮或 `Esc` 可跳过。主题存在当前页面的 `localStorage`，不跨设备同步。
+- 目前是代码绘制的动效，不是视频。要 18s 那种“放视频”的效果，需要再加一个可选视频资产或原生启动器窗口，那是下一步。
 
 ## 发布到插件市场
 

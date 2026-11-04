@@ -11,5 +11,7 @@ Adds `dsh-splash`, a page-level startup splash for DSH.
 The progress bar is driven by real boot milestones (client plugin graph via
 `ctx.loader.entries()`, Host connection state, workspace/session baselines, and
 first paint), not by a timer. It covers the boot page, adopts the same DOM node
-into `shell.overlay` when the frame mounts, and fades out after startup completes
-with a 2s minimum display time.
+into `shell.overlay` when the frame mounts, and then plays a **7.2s skippable
+intro** (3.8s / 10s options) before fading into the app. A persistent theme dock
+offers ten palettes derived from Monument Valley and Geometric Islands, with
+local preview and `localStorage` persistence.

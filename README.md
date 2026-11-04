@@ -2,16 +2,23 @@
 
 <p align="center"><img src="assets/icon-512.png" width="128" alt="dsh-splash icon"></p>
 
-A DSH startup splash: a Penrose triangle light-sweep over a living isometric diamond ocean, a progress bar driven by **real boot milestones**, and a fade-out when startup completes.
+A DSH startup splash: a Penrose triangle light-sweep over a living isometric diamond ocean, a progress bar driven by **real boot milestones**, a 7.2s skippable intro, and a theme dock with ten palettes.
 
 Visual harness: `preview/preview.html?mode=static` (runs the real client bundle against fake services; open it in a browser).
 
+## Intro and themes
+
+- The default **7.2s** is a fixed minimum timeline, not a timer-driven boot bar: choose 3.8s / 7.2s / 10s in the theme dock, or exit early with the **Skip** button / Esc.
+- The theme dock sits at the bottom-right of the app: ten palettes derived from Monument Valley (`E:\mv-refs\palette.json`) and Geometric Islands (`E:\web\Geometric Islands\style.css`), a **Preview splash** action, and `localStorage` persistence.
+- Palettes drive the background, frame, progress bar, text, ocean tiles/grid, and the three Penrose faces; dark palettes also flip text/border contrast.
+- The intro timeline may finish after the app is already ready; the real progress bar reaches 100 independently and never fakes a percentage.
+
 ## What is preserved
 
-- 24s Penrose rotation; the three faces cycle through `#f1a2aa → #8f5f94 → #d4869b` over the same 24s.
-- The circle holds an isometric diamond ocean: a double-sine wave displaces the point grid; each diamond mixes the pale/pink palette by its average height and is stroked in brand purple.
-- 1.6s circle emerge, 1.2s-delayed brand fade-in, same curves as the prototype.
-- 640ms fade-out after completion, then canvas, styles, timers, and listeners are released.
+- 24s Penrose rotation; the three faces cycle through the palette's light/mid/dark colours over the same 24s.
+- The circle holds an isometric diamond ocean: a double-sine wave displaces the point grid; each diamond mixes the palette's low/high colours by its average height and is stroked in the grid colour.
+- The circle emerges over the intro's first ~1.6s and slowly zooms; the brand fades in at 1.5s.
+- 640ms fade-out after the intro/startup, then canvas, styles, timers, and listeners are released.
 
 ## Real progress, not a timer
 
@@ -53,6 +60,8 @@ DSH HMR watches the profile patch and recomposes; the browser receives the new m
 ```powershell
 dsh plugin --profile desktop add dsh-splash
 ```
+
+As of 2026-11-04, npm `latest` is **0.1.0**; the 0.2.0 long-intro/theme-dock work is currently the local `link:` dev build. Publishing 0.2.0 makes this command pick it up.
 
 Installing through the DSH plugin market applies the package's `cordis.patch.yml`, so no manual row is needed.
 
@@ -98,16 +107,19 @@ Development-only switches:
 |---|---|
 | `?dsh-splash=off` | Do not show this load |
 | `?dsh-splash=force` | Show even when the page is already mounted |
-| `?dsh-splash-min=800` | Minimum visible time in ms (default 2000) |
-| `window.__DSH_SPLASH__ = { minVisibleMs, force, disabled, debug }` | Programmatic form |
+| `?dsh-splash-min=3800` | Intro minimum in ms (default 7200) |
+| `?dsh-splash-palette=island-night` | Force a palette for this load |
+| `window.__DSH_SPLASH__ = { minVisibleMs, palette, force, disabled, debug }` | Programmatic form |
 
-`minVisibleMs` only holds a completed splash; it never fabricates progress. A real startup that takes longer fades as soon as it is actually complete.
+`minVisibleMs` only holds the intro timeline; it never fabricates progress. A real startup that takes longer keeps the splash until it is actually complete.
 
 ## Known boundaries
 
 - The splash is page-level. There is no injectable moment between native window creation and page scripts; that gap remains owned by the desktop shell.
 - `shell.overlay` exists only after mount, hence the two-stage body → seat adoption. If the seat disappears during a layout reload, the node is returned to `body` rather than lost.
 - A startup failure is covered for at most 20s, then the splash fades so the error page is reachable. The bar never fakes 100%.
+- The 7.2s intro is a default, not a lock: the theme dock offers 3.8s / 7.2s / 10s, and the Skip button / Esc exits immediately. Theme settings live in this page origin's `localStorage`; they do not sync across devices.
+- The animation is code-drawn, not a video. A 15–18s video-style intro would need an optional video asset or a native launcher window; that is a separate step.
 - Missing `ctx.loader`, `connection`, `workspaces`, or `sessions` capabilities are skipped after a short grace period instead of hanging the splash.
 
 ## License

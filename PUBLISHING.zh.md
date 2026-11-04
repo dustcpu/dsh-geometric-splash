@@ -29,9 +29,13 @@ As of 2026-11-04:
 - The working tree, `package.json`, README, catalog YAML, and PR body point at
   `dustcpu/dsh-geometric-splash`; `main` and the prepared commit are pushed.
 - npm CLI is authenticated as `dusttttt`; 2FA is enabled with
-  `"mode": "auth-and-writes"`. **`dsh-splash@0.1.0` is published** (latest,
-  2026-11-04T05:05Z); `npm view dsh-splash version` returns `0.1.0`, and the
-  package's `repository` points at `dustcpu/dsh-geometric-splash`.
+  `"mode": "auth-and-writes"`. **`dsh-splash@0.1.0` is published** (the current
+  npm `latest`, 2026-11-04T05:05Z); `npm view dsh-splash version` returns
+  `0.1.0`, and the package's `repository` points at
+  `dustcpu/dsh-geometric-splash`.
+- **0.2.0 is in the working tree, not published**: a 7.2s default skippable
+  intro (3.8s / 10s choices) and a theme dock with ten palettes. It is testable
+  through the local `link:` profile before release.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
@@ -43,11 +47,14 @@ As of 2026-11-04:
 
 Next:
 
+- Try 0.2.0 through the local link (Ctrl+R for the long intro; the theme dock is
+  at the bottom-right). If it looks right, publish `0.2.0`:
+  `npm publish --access public` (security-key prompt).
 - Confirm the repository is **public**, and keep the **`dsh-plugin`** topic.
 - When you decide to list, fork `awesome-dsh-plugin` and open the one-file PR
   with the prepared YAML.
-- For future code changes, publish a new npm version (`0.1.1` / `0.2.0`); do not
-  try to overwrite `0.1.0`.
+- For future code changes, publish a new npm version; do not try to overwrite
+  `0.1.0` or `0.2.0`.
 
 ## 0. What the reviewer needs to see
 
