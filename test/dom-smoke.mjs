@@ -304,8 +304,15 @@ for (const effect of pendingEffects.splice(0)) effect()
 const dock = document.querySelector('.dsh-splash-dock')
 assert.ok(dock, 'theme dock mounted')
 assert.equal(dock.querySelectorAll('.dsh-splash-dock__preset').length, 10, 'all palettes are listed')
-assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 3, 'three intro lengths are listed')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__durations').length, 2, 'intro and progress groups are listed')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 5, 'three intro lengths and two progress modes are listed')
 assert.ok(document.querySelector('style[data-plugin-css="dsh-splash/dock.css"]'), 'dock stylesheet exists')
+
+// Live palette switch while the splash is still on screen.
+const nightRow = dock.querySelectorAll('.dsh-splash-dock__preset').find((row) => row.dataset.palette === 'island-night')
+assert.ok(nightRow, 'island-night preset exists')
+nightRow.dispatch('click')
+assert.equal(splash.dataset.palette, 'island-night', 'palette switches live on the splash')
 assert.equal(splash.parentNode, body)
 assert.ok(capturedComponent, 'shell.overlay seat registered while booting')
 

@@ -9,9 +9,9 @@ Visual harness: `preview/preview.html?mode=static` (runs the real client bundle 
 ## Intro and themes
 
 - The default **7.2s** is a fixed minimum timeline, not a timer-driven boot bar: choose 3.8s / 7.2s / 10s in the theme dock, or exit early with the **Skip** button / Esc.
-- The theme dock sits at the bottom-right of the app: ten palettes derived from Monument Valley (`E:\mv-refs\palette.json`) and Geometric Islands (`E:\web\Geometric Islands\style.css`), a **Preview splash** action, and `localStorage` persistence.
+- The theme dock sits at the **bottom-left** and floats above the splash: ten palettes derived from Monument Valley (`E:\mv-refs\palette.json`) and Geometric Islands (`E:\web\Geometric Islands\style.css`), intro length, **Cinematic / Real** progress pacing, a preview action, and `localStorage` persistence. Palette and pacing changes are live while the splash is on screen; intro length applies to the next launch.
 - Palettes drive the background, frame, progress bar, text, ocean tiles/grid, and the three Penrose faces; dark palettes also flip text/border contrast.
-- The intro timeline may finish after the app is already ready; the real progress bar reaches 100 independently and never fakes a percentage.
+- Cinematic progress follows the intro timeline (ease-out) but is clamped by real readiness: it can be slower than reality, never faster, and only reaches 100 when both the intro and startup finish.
 
 ## What is preserved
 
@@ -32,7 +32,7 @@ Five weighted milestones sum to 100:
 | Workspace / session baseline | 18 | `phase === 'ready'` on `ctx.get('workspaces').list` and `ctx.get('sessions').list` |
 | First paint + fonts | 10 | two post-mount rAFs + `document.fonts.ready` (800ms cap) |
 
-Only the *displayed* value eases toward the target (`1 - e^(-dt/110)`); the target itself is never timer-driven. Stage copy shows real counts such as `Loading plugins 37/94`.
+Only the *displayed* value eases toward the target (`1 - e^(-dt/110)`). In the default **cinematic** mode the target is `min(real readiness, timeline)`; the timeline only makes the bar slower and can never pass real readiness. The **Real** mode uses the raw target. Stage copy shows real counts such as `Loading plugins 37/94`; when the app is ready but the intro timeline is still running, the stage reads "Entering".
 
 `shell.overlay` only exists after the React app mounts. The plugin therefore paints its own DOM on `document.body` during `apply` (covering the kernel's "Loading plugins…" page), then re-parents that exact node into the `shell.overlay` seat when the frame mounts. One DOM tree, no flash, and the plugin-loading half of boot is still visible.
 
@@ -109,9 +109,10 @@ Development-only switches:
 | `?dsh-splash=force` | Show even when the page is already mounted |
 | `?dsh-splash-min=3800` | Intro minimum in ms (default 7200) |
 | `?dsh-splash-palette=island-night` | Force a palette for this load |
-| `window.__DSH_SPLASH__ = { minVisibleMs, palette, force, disabled, debug }` | Programmatic form |
+| `?dsh-splash-progress=real` | Use raw real progress (default `cinematic`) |
+| `window.__DSH_SPLASH__ = { minVisibleMs, palette, progress, force, disabled, debug }` | Programmatic form |
 
-`minVisibleMs` only holds the intro timeline; it never fabricates progress. A real startup that takes longer keeps the splash until it is actually complete.
+`minVisibleMs` is the intro timeline; it never fabricates progress.
 
 ## Known boundaries
 

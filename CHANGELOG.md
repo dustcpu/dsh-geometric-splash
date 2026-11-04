@@ -4,17 +4,24 @@
 
 - Cinematic intro timeline: 7.2s default, 3.8s / 10s choices, with a visible
   **Skip** button and Esc to exit early.
-- Theme dock in `shell.overlay`: ten palettes derived from
-  `E:\mv-refs\palette.json` (swamp, warm gold, teal, sunset, dark room) and
-  `E:\web\Geometric Islands\style.css` (blue, green, amber, purple, night).
+- Progress pacing: **Cinematic** (default) follows the intro timeline but is
+  clamped by real readiness, so the bar keeps moving yet only reaches 100 when
+  startup actually completes; **Real** mode keeps the raw milestone bar. The
+  "Entering" stage covers the gap between app-ready and intro-end.
+- Theme dock in `shell.overlay`: floats above the splash at the bottom-left;
+  ten palettes derived from `E:\mv-refs\palette.json` (swamp, warm gold, teal,
+  sunset, dark room) and `E:\web\Geometric Islands\style.css` (blue, green,
+  amber, purple, night). Palette and pacing changes apply live during the intro.
 - Palette-aware ocean canvas and Penrose light sweep; stronger ocean grid
   contrast.
 - Settings persisted in `localStorage` (`dsh-splash:settings`), with a live
   **Preview splash** action that does not require a restart.
-- New dev overrides: `?dsh-splash-palette=<id>` and `?dsh-splash-min=<ms>`.
+- New dev overrides: `?dsh-splash-palette=<id>`, `?dsh-splash-min=<ms>`, and
+  `?dsh-splash-progress=real`.
 - Reduced-motion shortens the intro and disables the decorative animation.
 - Smoke test now mounts the theme dock, checks all ten palettes / three intro
-  lengths, and verifies the preview splash lifecycle.
+  lengths / two progress modes, switches palette live, and verifies the preview
+  splash lifecycle.
 
 ## 0.1.0 — 2026-11-04
 

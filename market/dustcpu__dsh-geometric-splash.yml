@@ -7,8 +7,8 @@ url: https://github.com/dustcpu/dsh-geometric-splash
 name: dustcpu/dsh-geometric-splash
 category: ui
 description:
-  en: 'Page-level startup splash: a Penrose triangle light sweep over a living isometric diamond ocean, a progress bar driven by real DSH boot milestones, a 7.2s skippable intro, and a theme dock with ten palettes drawn from Monument Valley and Geometric Islands.'
-  zh: '页面级启动开屏：彭罗斯三角在等距菱格海面上旋转受光，进度条读取真实 DSH 启动里程碑；7.2 秒可跳过开屏，主题坞提供 Monument Valley / Geometric Islands 十套色板。'
+  en: 'Page-level startup splash: a Penrose triangle light sweep over a living isometric diamond ocean, a progress bar paced by the intro but capped by real DSH boot milestones, a 7.2s skippable intro, and a theme dock with ten palettes drawn from Monument Valley and Geometric Islands.'
+  zh: '页面级启动开屏：彭罗斯三角在等距菱格海面上旋转受光，进度条按开屏节奏平滑推进、以真实 DSH 启动完成度为上限；7.2 秒可跳过开屏，主题坞提供 Monument Valley / Geometric Islands 十套色板。'
 # Optional: one GitHub-hosted raster image (png/jpg/jpeg/webp), square, ~96px tile.
 # Omit it to fall back to the repository owner's avatar.
 icon: https://raw.githubusercontent.com/dustcpu/dsh-geometric-splash/main/assets/icon-512.png
