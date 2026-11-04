@@ -19,6 +19,27 @@ day.
 > Either use the github.com web UI for the repository/fork/PR, or install it
 > first (`winget install --id GitHub.cli`).
 
+## Current status
+
+Done on 2026-11-04:
+
+- `main` pushed to https://github.com/dustcpu/dsh-splash; tag `v0.1.0`.
+- `repository` / `homepage` / `bugs` / `author` / `icon` filled in `package.json`.
+- `assets/icon-512.png` added; the catalog YAML references it.
+- `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
+- Ready catalog entry and PR body:
+  [market/dustcpu__dsh-splash.yml](market/dustcpu__dsh-splash.yml),
+  [market/PR-body.md](market/PR-body.md).
+
+Still needs your account:
+
+- Confirm the repository is **public**, and add the **`dsh-plugin`** topic
+  (Settings → Topics). Git cannot set topics.
+- `npm login` + `npm publish --access public` if you want the npm download
+  figure and npm-based installs; the catalog works without npm.
+- Wait until the repository is 24 hours old, then fork `awesome-dsh-plugin` and
+  open the one-file PR with the prepared YAML.
+
 ## 0. What the reviewer needs to see
 
 - `package.json` declares **both** `dsh.bundle` and `dsh.client` (this package
