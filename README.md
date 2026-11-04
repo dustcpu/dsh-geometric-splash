@@ -9,7 +9,7 @@ Visual harness: `preview/preview.html?mode=static` (runs the real client bundle 
 ## Intro and themes
 
 - The default **7.2s** is a fixed minimum timeline, not a timer-driven boot bar: choose 3.8s / 7.2s / 10s in the theme dock, or exit early with the **Skip** button / Esc.
-- The theme dock sits at the **top-right**, just below the window controls, and floats above the splash: ten palettes derived from Monument Valley (`E:\mv-refs\palette.json`) and Geometric Islands (`E:\web\Geometric Islands\style.css`), intro length, **Cinematic / Real** progress pacing, a preview action, and `localStorage` persistence. Palette and pacing changes are live while the splash is on screen; intro length applies to the next launch.
+- The theme entry lives in the **conversation header utilities** (the app's top navigation bar, next to the folder / more / panel buttons); during the splash a **Theme** button also appears at the bottom-left. The panel floats above the splash: ten palettes derived from Monument Valley (`E:\mv-refs\palette.json`) and Geometric Islands (`E:\web\Geometric Islands\style.css`), intro length, **Cinematic / Real** progress pacing, a preview action, and `localStorage` persistence. Palette and pacing changes are live while the splash is on screen; intro length applies to the next launch.
 - Palettes drive the background, frame, progress bar, text, ocean tiles/grid, and the three Penrose faces; dark palettes also flip text/border contrast.
 - Cinematic progress follows the intro timeline (ease-out) but is clamped by real readiness: it can be slower than reality, never faster, and only reaches 100 when both the intro and startup finish.
 

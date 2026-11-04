@@ -8,7 +8,7 @@
   clamped by real readiness, so the bar keeps moving yet only reaches 100 when
   startup actually completes; **Real** mode keeps the raw milestone bar. The
   "Entering" stage covers the gap between app-ready and intro-end.
-- Theme dock in `shell.overlay`: floats above the splash at the top-right;
+- Theme entry in `conversation.session.header.utilities`: an inline palette icon in the conversation header (no overlay over the sidebar avatar), plus a **Theme** button during the splash;
   ten palettes derived from `E:\mv-refs\palette.json` (swamp, warm gold, teal,
   sunset, dark room) and `E:\web\Geometric Islands\style.css` (blue, green,
   amber, purple, night). Palette and pacing changes apply live during the intro.
