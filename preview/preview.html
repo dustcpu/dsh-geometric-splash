@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dsh-splash preview harness</title>
+<style>
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #202020; }
+  #app { position: absolute; inset: 0; display: grid; place-items: center; color: #ddd; font: 14px/1.5 sans-serif; }
+  #seat-host { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+  #log { position: absolute; right: 8px; bottom: 8px; max-width: 46vw; max-height: 40vh; overflow: auto;
+         background: rgba(0,0,0,.72); color: #9fe; font: 11px/1.45 Consolas, monospace; padding: 8px 10px;
+         border-radius: 6px; white-space: pre-wrap; z-index: 5; }
+  body[data-preview="clean"] #log { display: none; }
+</style>
+</head>
+<body>
+<div id="app">application frame (fake)</div>
+<div id="seat-host"></div>
+<pre id="log"></pre>
+
+<script>
+(function () {
+  var logEl = document.getElementById('log');
+  var logs = [];
+  function log(line) {
+    logs.push(line);
+    logEl.textContent = logs.join('\n');
+    window.__PREVIEW_LOG__ = logs;
+  }
+
+  // ---- fake React: only the seat component is ever rendered ----------------
+  var pendingEffects = [];
+  var fakeReact = {
+    createElement: function (type, props) {
+      var el = document.createElement(type);
+      if (props && props.ref) props.ref.current = el;
+      return el;
+    },
+    useRef: function (initial) { return { current: initial }; },
+    useLayoutEffect: function (fn) { pendingEffects.push(fn); }
+  };
+
+  var registration = null;
+  window.__ModuleLoader__ = {
+    load: function (value) { registration = value; }
+  };
+
+  // ---- fake boot state -----------------------------------------------------
+  var TOTAL = 48;
+  var bootEntries = [];
+  for (var i = 0; i < TOTAL; i += 1) bootEntries.push({ fiber: { state: 0 } });
+  function setActive(count) {
+    for (var i = 0; i < TOTAL; i += 1) bootEntries[i].fiber.state = i < count ? 2 : 1;
+  }
+
+  var bootPage = document.createElement('div');
+  bootPage.setAttribute('data-dsh-boot', '');
+  bootPage.textContent = 'HARNESS — Loading plugins…';
+  document.getElementById('app').appendChild(bootPage);
+
+  // ---- fake services -------------------------------------------------------
+  var connectionListeners = new Set();
+  var connectionState = 'connecting';
+  var connection = {
+    state: {
+      getSnapshot: function () { return connectionState; },
+      subscribe: function (fn) { connectionListeners.add(fn); return function () { connectionListeners.delete(fn); }; }
+    }
+  };
+
+  function makePhaseService(phase) {
+    var listeners = new Set();
+    return {
+      list: {
+        getSnapshot: function () { return { phase: phase.value }; },
+        subscribe: function (fn) { listeners.add(fn); return function () { listeners.delete(fn); }; }
+      },
+      set: function (next) {
+        phase.value = next;
+        listeners.forEach(function (fn) { fn(); });
+      }
+    };
+  }
+  var workspacePhase = { value: 'loading' };
+  var sessionPhase = { value: 'loading' };
+  var workspaces = makePhaseService(workspacePhase);
+  var sessions = makePhaseService(sessionPhase);
+
+  var services = {
+    modules: { manifest: { plugins: new Array(TOTAL).fill(0) } },
+    connection: connection,
+    workspaces: workspaces,
+    sessions: sessions
+  };
+
+  var capturedComponent = null;
+  var ctx = {
+    get: function (name) { return services[name]; },
+    loader: { entries: function () { return bootEntries; } },
+    locale: { register: function () { return function () {}; }, bind: function () { return null; } },
+    effect: function (fn) { return fn(); },
+    slots: {
+      inject: function (name, register) { return register(); },
+      register: function (options, component) {
+        capturedComponent = component;
+        log('registered ' + options.name + ' seat id=' + options.id + ' order=' + options.order);
+        return function () {};
+      }
+    }
+  };
+
+  // ---- load the real bundle ------------------------------------------------
+  window.__SPLASH__ = {
+    ready: new Promise(function (resolve) {
+      window.__SPLASH_RESOLVE__ = resolve;
+    })
+  };
+
+  var script = document.createElement('script');
+  script.src = '../lib/client.js';
+  script.onload = function () {
+    if (registration === null) { log('FAIL: bundle did not call __ModuleLoader__.load'); return; }
+    var module;
+    try {
+      module = registration.factory(function (request) {
+        if (request === 'react') return fakeReact;
+        throw new Error('unexpected require: ' + request);
+      });
+    } catch (error) {
+      log('FAIL: factory threw: ' + error.message);
+      return;
+    }
+    log('bundle loaded: ' + registration.id + ' exports=' + Object.keys(module).join(','));
+    try {
+      module.apply(ctx);
+    } catch (error) {
+      log('FAIL: apply threw: ' + error.message + '\n' + error.stack);
+      return;
+    }
+    window.__SPLASH_API__ = module;
+    window.__SPLASH_RESOLVE__(module);
+    log('apply returned; splash=' + (document.querySelector('.dsh-splash') !== null));
+  };
+  script.onerror = function () { log('FAIL: lib/client.js did not load'); };
+  document.head.appendChild(script);
+
+  // ---- drive the fake boot -------------------------------------------------
+  var active = 0;
+  var bootTimer = setInterval(function () {
+    active = Math.min(TOTAL, active + 3);
+    setActive(active);
+    if (active >= TOTAL) {
+      clearInterval(bootTimer);
+      log('boot roster active ' + TOTAL + '/' + TOTAL);
+    }
+  }, 90);
+
+  function setConnection(next) {
+    connectionState = next;
+    connectionListeners.forEach(function (fn) { fn(); });
+  }
+
+  function mountApplication() {
+    if (capturedComponent === null) { log('FAIL: no seat component captured'); return; }
+    var boot = document.querySelector('[data-dsh-boot]');
+    if (boot) boot.remove();
+    log('boot page removed; mounting shell.overlay seat');
+    var host = document.getElementById('seat-host');
+    pendingEffects = [];
+    var seat = capturedComponent();
+    host.appendChild(seat);
+    pendingEffects.forEach(function (fn) { fn(); });
+    pendingEffects = [];
+    log('seat mounted; splash adopted=' + (document.querySelector('.dsh-splash') !== null));
+    window.setTimeout(function () { setConnection('connected'); log('connection -> connected'); }, 250);
+    window.setTimeout(function () { workspaces.set('ready'); log('workspaces -> ready'); }, 500);
+    window.setTimeout(function () { sessions.set('ready'); log('sessions -> ready'); }, 750);
+  }
+
+  var params = new URLSearchParams(location.search);
+  var mode = params.get('mode') || 'auto';
+  if (mode === 'static') {
+    setActive(23);
+    document.body.dataset.preview = 'clean';
+    log('static preview: boot 23/' + TOTAL);
+  } else {
+    window.setTimeout(mountApplication, 1500);
+    window.setTimeout(function () {
+      var splash = document.querySelector('.dsh-splash');
+      var pct = splash && splash.querySelector('.dsh-splash__pct');
+      log('checkpoint 2.2s splash=' + (splash !== null) + ' state=' + (splash && splash.dataset.state) +
+          ' pct=' + (pct && pct.textContent) + ' phase=' + (splash && splash.dataset.phase));
+    }, 2200);
+    window.setTimeout(function () {
+      var splash = document.querySelector('.dsh-splash');
+      var pct = splash && splash.querySelector('.dsh-splash__pct');
+      log('checkpoint 4.5s splash=' + (splash !== null) + ' state=' + (splash && splash.dataset.state) +
+          ' pct=' + (pct && pct.textContent));
+      window.__PREVIEW_DONE__ = splash === null;
+    }, 4500);
+  }
+})();
+</script>
+</body>
+</html>

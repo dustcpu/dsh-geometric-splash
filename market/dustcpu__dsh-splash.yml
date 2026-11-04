@@ -1,0 +1,14 @@
+# Ready-to-copy catalog entry for awesome-dsh-plugin.
+# Copy this file to:
+#   data/plugins/dustcpu__dsh-splash.yml
+# in your fork of awesome-dsh-plugin/awesome-dsh-plugin.
+# The PR should add this one file only.
+url: https://github.com/dustcpu/dsh-splash
+name: dustcpu/dsh-splash
+category: ui
+description:
+  en: 'Page-level startup splash: a Penrose triangle light sweep over a living isometric diamond ocean, with a progress bar driven by real DSH boot milestones; it fades out after startup completes, with a short minimum display time.'
+  zh: '页面级启动开屏：彭罗斯三角在等距菱格海面上旋转受光，进度条读取真实 DSH 启动里程碑；启动完成后淡出，并有短暂的最短展示时间。'
+# Optional: one GitHub-hosted raster image (png/jpg/jpeg/webp), square, ~96px tile.
+# Omit it to fall back to the repository owner's avatar.
+# icon: https://raw.githubusercontent.com/dustcpu/dsh-splash/main/assets/icon-512.png

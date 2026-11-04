@@ -1,0 +1,6 @@
+# dsh-splash bundle patch: inserts the splash host row into a profile's layer stack.
+# The row has no host behaviour; its only job is to make dsh.client visible to the
+# browser module graph, which serves lib/client.js and mounts the shell.overlay seat.
+- insert:
+    - id: dsh-splash
+      name: dsh-splash

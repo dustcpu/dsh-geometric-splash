@@ -1,0 +1,57 @@
+{
+  "name": "dsh-splash",
+  "version": "0.1.0",
+  "description": "DSH startup splash overlay: Penrose light sweep over a living diamond ocean, driven by real boot milestones.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "screenshots.json"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "splash",
+    "splash-screen",
+    "startup"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20",
+    "dsh": ">=0.2.1-rc.5 <0.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustcpu/dsh-splash.git"
+  },
+  "homepage": "https://github.com/dustcpu/dsh-splash",
+  "bugs": {
+    "url": "https://github.com/dustcpu/dsh-splash/issues"
+  },
+  "author": "dustcpu"
+}
