@@ -139,15 +139,13 @@ mid-boot state, or temporarily raise `DEFAULT_MIN_VISIBLE_MS` in
 
 ### Icon
 
-Optional. The market tile is a ~96px square, GitHub-hosted **raster** image
-(`png`/`jpg`/`jpeg`/`webp`); SVG and third-party hosts are refused. If omitted,
-the market falls back to the repository owner's avatar. To add one:
-
-```
-assets/icon-512.png
-```
-
-and reference it in the catalog YAML as shown below.
+The repository already ships `assets/icon-512.png` (a cream circle with the
+Penrose triangle in the splash palette), and the ready catalog entry references
+it at `https://raw.githubusercontent.com/dustcpu/dsh-splash/main/assets/icon-512.png`.
+Replace that file and keep the same path if you want a different icon; the market
+tile is a ~96px square, GitHub-hosted **raster** image (`png`/`jpg`/`jpeg`/`webp`).
+SVG and third-party hosts are refused. If you remove the `icon:` line entirely,
+the market falls back to the repository owner's avatar.
 
 ## 5. Add the catalog entry
 

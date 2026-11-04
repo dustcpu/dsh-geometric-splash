@@ -1,5 +1,7 @@
 # dsh-splash
 
+<p align="center"><img src="assets/icon-512.png" width="128" alt="dsh-splash icon"></p>
+
 DSH 启动开屏插件：彭罗斯三角在等距菱格海面上旋转受光，底部进度条读取 **真实启动进度**，启动完成后淡出。
 
 视觉测试台：`preview/preview.html?mode=static`（用真实 bundle 跑假服务，可直接用浏览器打开）。

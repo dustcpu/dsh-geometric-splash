@@ -1,5 +1,7 @@
 # dsh-splash
 
+<p align="center"><img src="assets/icon-512.png" width="128" alt="dsh-splash icon"></p>
+
 A DSH startup splash: a Penrose triangle light-sweep over a living isometric diamond ocean, a progress bar driven by **real boot milestones**, and a fade-out when startup completes.
 
 Visual harness: `preview/preview.html?mode=static` (runs the real client bundle against fake services; open it in a browser).

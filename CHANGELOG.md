@@ -12,5 +12,6 @@
   and session baselines (`phase === 'ready'`), and first paint + fonts.
 - 2s minimum display after completion, 640ms fade-out, and a 20s failure cap.
 - `engines.dsh: >=0.2.1-rc.5 <0.3.0`.
+- Brand icon at `assets/icon-512.png` (cream circle + Penrose, matching the splash palette).
 - Node DOM smoke test covering cold-boot detection, monotonic progress,
   `shell.overlay` adoption, fade-out, and cleanup.

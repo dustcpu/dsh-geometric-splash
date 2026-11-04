@@ -20,7 +20,8 @@
     "README.md",
     "README.zh.md",
     "CHANGELOG.md",
-    "screenshots.json"
+    "screenshots.json",
+    "assets"
   ],
   "keywords": [
     "dsh",
@@ -54,5 +55,6 @@
   "bugs": {
     "url": "https://github.com/dustcpu/dsh-splash/issues"
   },
-  "author": "dustcpu"
+  "author": "dustcpu",
+  "icon": "./assets/icon-512.png"
 }
