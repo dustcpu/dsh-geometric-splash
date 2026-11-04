@@ -6,7 +6,7 @@ This guide is written against the official rules in
 its plugin list comes from `awesome-dsh-plugin.com/plugins.json`, generated from
 one YAML file per plugin in `awesome-dsh-plugin/data/plugins/`.
 
-This repository is `dustcpu/dsh-splash`; the commands below use `dustcpu`.
+This repository is `dustcpu/dsh-geometric-splash`; the commands below use `dustcpu`.
 If you later rename or transfer the repository, replace the owner and repository
 name consistently in `package.json` and the catalog entry.
 
@@ -21,24 +21,30 @@ day.
 
 ## Current status
 
-Done on 2026-11-04:
+As of 2026-11-04:
 
-- `main` pushed to https://github.com/dustcpu/dsh-splash; tag `v0.1.0`.
-- `repository` / `homepage` / `bugs` / `author` / `icon` filled in `package.json`.
-- `assets/icon-512.png` added; the catalog YAML references it.
+- The repository is renamed to **`dustcpu/dsh-geometric-splash`** (done). GitHub
+  preserves history, `v0.1.0`, the topic, and the creation date; the old URL
+  redirects.
+- The working tree, `package.json`, README, catalog YAML, and PR body point at
+  `dustcpu/dsh-geometric-splash`; the prepared commit is ready to push.
+- npm CLI is authenticated as `dusttttt`; `dsh-splash` is **not published yet**.
+- `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
-  [market/dustcpu__dsh-splash.yml](market/dustcpu__dsh-splash.yml),
+  [market/dustcpu__dsh-geometric-splash.yml](market/dustcpu__dsh-geometric-splash.yml),
   [market/PR-body.md](market/PR-body.md).
+- **Catalog submission is intentionally deferred.** The repository can stay
+  public and the npm package can be published without listing it; open the
+  catalog PR whenever you are ready (after the 24-hour age gate).
 
-Still needs your account:
+Next:
 
-- Confirm the repository is **public**, and add the **`dsh-plugin`** topic
-  (Settings → Topics). Git cannot set topics.
-- `npm login` + `npm publish --access public` if you want the npm download
-  figure and npm-based installs; the catalog works without npm.
-- Wait until the repository is 24 hours old, then fork `awesome-dsh-plugin` and
-  open the one-file PR with the prepared YAML.
+- Push the rename commit and publish npm (the agent can do both once the remote
+  points at the new name).
+- Confirm the repository is **public**, and keep the **`dsh-plugin`** topic.
+- When you decide to list, fork `awesome-dsh-plugin` and open the one-file PR
+  with the prepared YAML.
 
 ## 0. What the reviewer needs to see
 
@@ -51,18 +57,15 @@ Still needs your account:
 - The repository has the **`dsh-plugin`** GitHub topic.
 - The package's `repository` field points back at the listed repository.
 
-## 1. Create the GitHub repository
+## 1. Repository name
 
-The public repository `dustcpu/dsh-splash` already exists and is empty as of
-2026-11-04. The first push is the only step needed here; the commands below are
-also the reference for a fresh copy.
+The repository was created as `dustcpu/dsh-splash` and renamed to
+**`dustcpu/dsh-geometric-splash`**; history, tag, topic, and creation date are
+preserved. Point the local remote at the new name and push the prepared commit:
 
 ```powershell
 cd C:\Users\Lenovo\Documents\deepseek-harness\default-workspace\dsh-splash
-git init -b main
-git add -A
-git commit -m "dsh-splash 0.1.0"
-git remote add origin git@github.com:dustcpu/dsh-splash.git
+git remote set-url origin git@github.com:dustcpu/dsh-geometric-splash.git
 $env:GIT_SSH='C:\Windows\System32\OpenSSH\ssh.exe'
 git push -u origin main
 ```
@@ -71,35 +74,35 @@ If you ever recreate it from scratch, the web UI or `gh` can create the public
 repository instead:
 
 ```powershell
-gh repo create dustcpu/dsh-splash --public --source . --remote origin --push
-gh repo edit dustcpu/dsh-splash --add-topic dsh-plugin
+gh repo create dustcpu/dsh-geometric-splash --public --source . --remote origin --push
+gh repo edit dustcpu/dsh-geometric-splash --add-topic dsh-plugin
 ```
 
 Without `gh`: create the public repo on github.com, then:
 
 ```powershell
-git remote add origin https://github.com/dustcpu/dsh-splash.git
+git remote add origin https://github.com/dustcpu/dsh-geometric-splash.git
 git push -u origin main
 ```
 
 and add the `dsh-plugin` topic in the repository settings.
 
-> The **1-day repository age** is checked by CI automatically. Create the repo
-> first, finish screenshots/README in the meantime, and open the catalog PR the
-> next day. Resubmitting is fine.
+> The **1-day repository age** is checked by CI automatically. The rename does
+> not reset it. There is no deadline to open the catalog PR; open it when ready
+> after the gate.
 
 ## 2. Point the package metadata at the repository
 
 Do this before `npm publish`; the market links npm to the repo through this
 field. The npm name `dsh-splash` is currently available, but re-check at publish
-time. If it has been taken, use a scope such as `@dustcpu/dsh-splash` and keep
+time. If it has been taken, use a scope such as `@dusttttt/dsh-splash` and keep
 the same repository URL.
 
 ```powershell
 npm pkg set "repository.type=git"
-npm pkg set "repository.url=git+https://github.com/dustcpu/dsh-splash.git"
-npm pkg set "homepage=https://github.com/dustcpu/dsh-splash"
-npm pkg set "bugs.url=https://github.com/dustcpu/dsh-splash/issues"
+npm pkg set "repository.url=git+https://github.com/dustcpu/dsh-geometric-splash.git"
+npm pkg set "homepage=https://github.com/dustcpu/dsh-geometric-splash"
+npm pkg set "bugs.url=https://github.com/dustcpu/dsh-geometric-splash/issues"
 npm pkg set "author=dustcpu"
 ```
 
@@ -109,15 +112,19 @@ The market does not require npm: plugins install from GitHub as well. npm adds a
 download figure and lets the market detect updates by version. Prebuilt npm
 installs also skip DSH's `allowBuilds` approval.
 
+The CLI on this machine is already authenticated as **`dusttttt`**. Run the
+publish **after** the repository rename, so the package's `repository` field
+points at the final URL:
+
 ```powershell
-npm login
-npm pack --dry-run     # confirm only lib/, cordis.patch.yml, README*, LICENSE are shipped
+npm whoami              # dusttttt
+npm pack --dry-run      # lib/, cordis.patch.yml, README*, LICENSE, assets/icon-512.png
 npm publish --access public
 ```
 
-> If PowerShell blocks `npm.ps1` with an execution-policy error, run
-> `npm.cmd publish --access public` (and the other `npm` commands as
-> `npm.cmd ...`) or use a normal terminal.
+> `npm login` is only needed on a new machine. If PowerShell blocks `npm.ps1`
+> with an execution-policy error, run `npm.cmd publish --access public` (and the
+> other `npm` commands as `npm.cmd ...`) or use a normal terminal.
 
 Do not publish build output that is missing: `lib/client.js` is the browser half
 and must be in the tarball. `package.json` `files` already lists it.
@@ -162,7 +169,7 @@ mid-boot state, or temporarily raise `DEFAULT_MIN_VISIBLE_MS` in
 
 The repository already ships `assets/icon-512.png` (a cream circle with the
 Penrose triangle in the splash palette), and the ready catalog entry references
-it at `https://raw.githubusercontent.com/dustcpu/dsh-splash/main/assets/icon-512.png`.
+it at `https://raw.githubusercontent.com/dustcpu/dsh-geometric-splash/main/assets/icon-512.png`.
 Replace that file and keep the same path if you want a different icon; the market
 tile is a ~96px square, GitHub-hosted **raster** image (`png`/`jpg`/`jpeg`/`webp`).
 SVG and third-party hosts are refused. If you remove the `icon:` line entirely,
@@ -174,21 +181,21 @@ The catalog entry is **one new file** in a fork of
 `awesome-dsh-plugin/awesome-dsh-plugin`:
 
 ```
-data/plugins/dustcpu__dsh-splash.yml
+data/plugins/dustcpu__dsh-geometric-splash.yml
 ```
 
 Content (this repository also keeps a template at
-`market/dustcpu__dsh-splash.yml`):
+`market/dustcpu__dsh-geometric-splash.yml`):
 
 ```yaml
-url: https://github.com/dustcpu/dsh-splash
-name: dustcpu/dsh-splash
+url: https://github.com/dustcpu/dsh-geometric-splash
+name: dustcpu/dsh-geometric-splash
 category: ui
 description:
   en: 'Page-level startup splash: a Penrose triangle light sweep over a living isometric diamond ocean, with a progress bar driven by real DSH boot milestones; it fades out after startup completes, with a short minimum display time.'
   zh: '页面级启动开屏：彭罗斯三角在等距菱格海面上旋转受光，进度条读取真实 DSH 启动里程碑；启动完成后淡出，并有短暂的最短展示时间。'
 # optional, GitHub-hosted raster only:
-# icon: https://raw.githubusercontent.com/dustcpu/dsh-splash/main/assets/icon-512.png
+# icon: https://raw.githubusercontent.com/dustcpu/dsh-geometric-splash/main/assets/icon-512.png
 ```
 
 Rules that matter:
@@ -211,8 +218,8 @@ Open the PR:
 gh repo fork awesome-dsh-plugin/awesome-dsh-plugin --clone
 cd awesome-dsh-plugin
 git checkout -b add-dsh-splash
-# copy market/dustcpu__dsh-splash.yml to data/plugins/dustcpu__dsh-splash.yml
-git add data/plugins/dustcpu__dsh-splash.yml
+# copy market/dustcpu__dsh-geometric-splash.yml to data/plugins/dustcpu__dsh-geometric-splash.yml
+git add data/plugins/dustcpu__dsh-geometric-splash.yml
 git commit -m "Add dsh-splash"
 git push -u origin add-dsh-splash
 gh pr create --repo awesome-dsh-plugin/awesome-dsh-plugin `
@@ -221,7 +228,7 @@ gh pr create --repo awesome-dsh-plugin/awesome-dsh-plugin `
 ```
 
 Without `gh`: fork the repository on github.com, create
-`data/plugins/dustcpu__dsh-splash.yml` with the **Add file → Create new file**
+`data/plugins/dustcpu__dsh-geometric-splash.yml` with the **Add file → Create new file**
 button, commit to a new branch, and use the website's **Compare & pull request**
 button. The content is the same; the filename and one-file-only shape are what
 matter.
@@ -249,13 +256,13 @@ the market fetches it live. Users can then install from the market or with:
 dsh plugin --profile web add dsh-splash
 
 # or straight from GitHub
-dsh plugin --profile web add github:dustcpu/dsh-splash
+dsh plugin --profile web add github:dustcpu/dsh-geometric-splash
 ```
 
 ## 7. Updating the listing later
 
 - **Description / category / icon:** open a PR editing your own
-  `data/plugins/dustcpu__dsh-splash.yml`; change only your entry.
+  `data/plugins/dustcpu__dsh-geometric-splash.yml`; change only your entry.
 - **Screenshots:** push `screenshots.json` and the images to your repository; no
   catalog PR, the next nightly build picks them up.
 - **Code / new version:** push to GitHub, bump the npm version, publish. The

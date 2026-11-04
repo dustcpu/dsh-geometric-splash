@@ -49,11 +49,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dustcpu/dsh-splash.git"
+    "url": "git+https://github.com/dustcpu/dsh-geometric-splash.git"
   },
-  "homepage": "https://github.com/dustcpu/dsh-splash",
+  "homepage": "https://github.com/dustcpu/dsh-geometric-splash",
   "bugs": {
-    "url": "https://github.com/dustcpu/dsh-splash/issues"
+    "url": "https://github.com/dustcpu/dsh-geometric-splash/issues"
   },
   "author": "dustcpu",
   "icon": "./assets/icon-512.png"

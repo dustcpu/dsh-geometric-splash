@@ -113,7 +113,7 @@ node test/dom-smoke.mjs
 
 市场的数据源是 [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 的 `data/plugins/`（一个插件一个 YAML），不是 dshmarket 仓库。完整流程——GitHub 仓库、`dsh-plugin` topic、npm 发布、收录 PR、CI 与后续更新——见 [PUBLISHING.zh.md](PUBLISHING.zh.md)。
 
-仓库已建为 [dustcpu/dsh-splash](https://github.com/dustcpu/dsh-splash)，收录 YAML 已备好：[market/dustcpu__dsh-splash.yml](market/dustcpu__dsh-splash.yml)。本包已声明 `dsh.bundle`、`dsh.client`、`engines.dsh`，并带有 `cordis.patch.yml`，满足收录的 manifest 要求。
+仓库已建为 [dustcpu/dsh-geometric-splash](https://github.com/dustcpu/dsh-geometric-splash)，收录 YAML 已备好：[market/dustcpu__dsh-geometric-splash.yml](market/dustcpu__dsh-geometric-splash.yml)。本包已声明 `dsh.bundle`、`dsh.client`、`engines.dsh`，并带有 `cordis.patch.yml`，满足收录的 manifest 要求。
 
 ## License
 
