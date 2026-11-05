@@ -19,8 +19,9 @@
     "cordis.patch.yml",
     "README.md",
     "README.en.md",
+    "README.developer.md",
+    "README.developer.en.md",
     "CHANGELOG.md",
-    "screenshots.json",
     "assets"
   ],
   "keywords": [
