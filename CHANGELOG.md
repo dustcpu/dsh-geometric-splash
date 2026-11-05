@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.2.2 — 2026-11-05
+
+- **The resident mark reports state by colour alone.** Speed is now one constant
+  18s rev for every state, and the vertical drift is gone entirely: a mark that
+  changes pace while you are not touching it reads as struggling rather than
+  working. The five states still differ, but only in their three-tone palette.
+- **Reasoning effort has a much wider spread**: `Off` 0.5x / `Low` 0.72x /
+  `High` 1x / `Max` 1.7x, i.e. 36s to 10.6s per revolution instead of 29s-12s.
+- **The handover is seamless.** The mark inherits the splash's exact rotation
+  angle at landing (read from the animated matrix), so the triangle no longer
+  rewinds to 0 degrees the moment it arrives.
+- **The flight re-aims every frame**, and each frame is measured back and
+  corrected, so the triangle lands exactly where the mark sits instead of
+  snapping a few pixels at handover.
+- **The mark disappears within a frame when the composer unmounts** (settings
+  and plugin pages), instead of hovering over the new page for up to 400ms.
+- **The theme-header icon keeps a constant rate** (14s) and only brightens on
+  hover; shortening `animation-duration` there had the same angle-snap problem.
+- **Removed the Cinematic / Real pacing control.** Any bare key skips the intro,
+  so a manual "Real" mode had no audience; cinematic is fixed. The
+  `?dsh-splash-progress=real` query parameter remains for debugging.
+- **Palette names are final**: 丁香之绽 / 碧空如洗 / 芽头新绿 / 风起黄昏 /
+  薰衣旧梦 / 夜生白露 / 紫金一瞬 / 青绿山水 / 陶土记忆 / 月下幽紫, with English
+  equivalents. Palette ids are unchanged, so saved choices survive.
+
 ## 0.2.1 — 2026-11-05
 
 - **The frame is the progress gauge.** Removed the progress bar and the two

@@ -1,8 +1,5 @@
-# Ready-to-copy catalog entry for awesome-dsh-plugin.
-# Copy this file to:
-#   data/plugins/dustcpu__dsh-geometric-splash.yml
-# in your fork of awesome-dsh-plugin/awesome-dsh-plugin.
-# The PR should add this one file only.
+# dsh-splash — DSH 启动开屏 + 常驻状态标记。
+# 收录条目：data/plugins/dustcpu__dsh-geometric-splash.yml（一个 PR 只加这一个文件）。
 url: https://github.com/dustcpu/dsh-geometric-splash
 name: dustcpu/dsh-geometric-splash
 category: ui

@@ -347,8 +347,7 @@ assert.ok(document.querySelector('.dsh-splash-theme-action'), 'theme trigger is 
 const dock = document.querySelector('.dsh-splash-theme-panel')
 assert.ok(dock, 'theme panel mounted')
 assert.equal(dock.querySelectorAll('.dsh-splash-dock__preset').length, 10, 'all palettes are listed')
-assert.equal(dock.querySelectorAll('.dsh-splash-dock__durations').length, 1, 'the progress group keeps its segmented row')
-assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 2, 'two progress modes are listed')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 0, 'the progress-pacing control is gone: cinematic is the only mode')
 const introRange = dock.querySelector('.dsh-splash-dock__range')
 assert.ok(introRange, 'intro length is a range input')
 assert.equal(introRange.min, '1000', 'intro range starts at 1s')
@@ -483,8 +482,8 @@ effortTrigger.setAttribute('aria-label', '选择模型，当前 DeepSeek-V4.1-Fl
 body.appendChild(effortTrigger)
 
 await sleep(900)
-assert.equal(mark.dataset.state, 'act', 'a running command turn spins the mark up')
-assert.equal(mark.dataset.effort, '1.45', 'max effort speeds it up')
+assert.equal(mark.dataset.state, 'act', 'a running command turn switches the mark to its act colour')
+assert.equal(mark.dataset.effort, '1.7', 'max effort scales the spin rate')
 assert.notEqual(mark.style.custom.get('--dsh-mark-c1'), idleFace, 'each state gets its own hue')
 
 activityFlag.setAttribute('data-process-activity', 'webSearch')
@@ -493,7 +492,7 @@ assert.equal(mark.dataset.state, 'search', 'a web search reads as scanning')
 
 activityFlag.setAttribute('data-process-activity', 'write')
 await sleep(900)
-assert.equal(mark.dataset.state, 'edit', 'writing a file holds one face lit')
+assert.equal(mark.dataset.state, 'edit', 'writing a file changes the tone, not the pace')
 
 streamingFlag.parentNode.removeChild(streamingFlag)
 await sleep(900)

@@ -29,13 +29,13 @@ As of 2026-11-04:
 - The working tree, `package.json`, README, catalog YAML, and PR body point at
   `dustcpu/dsh-geometric-splash`; `main` and the prepared commit are pushed.
 - npm CLI is authenticated as `dusttttt`; 2FA is enabled with
-  `"mode": "auth-and-writes"`. **`dsh-splash@0.1.0` is published** (the current
-  npm `latest`, 2026-11-04T05:05Z); `npm view dsh-splash version` returns
-  `0.1.0`, and the package's `repository` points at
-  `dustcpu/dsh-geometric-splash`.
-- **0.2.0 is in the working tree, not published**: a 7.2s default skippable
-  intro (3.8s / 10s choices) and a theme dock with ten palettes. It is testable
-  through the local `link:` profile before release.
+  `"mode": "auth-and-writes"`. **`dsh-splash@0.2.2` is the current release**;
+  `npm view dsh-splash version` returns `0.2.2`, and the package's `repository`
+  points at `dustcpu/dsh-geometric-splash`.
+- Published so far: `0.0.0-stage` → `0.1.0` → `0.2.0` → `0.2.1` → `0.2.2`.
+  `0.2.2` is the first release with the resident status mark fully settled:
+  colour-only states, constant spin, angle-continuous landing, per-frame flight
+  correction, and the finalised palette names.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Ready catalog entry and PR body:
@@ -47,14 +47,13 @@ As of 2026-11-04:
 
 Next:
 
-- Try 0.2.0 through the local link (Ctrl+R for the long intro; the theme dock is
-  at the bottom-right). If it looks right, publish `0.2.0`:
-  `npm publish --access public` (security-key prompt).
 - Confirm the repository is **public**, and keep the **`dsh-plugin`** topic.
-- When you decide to list, fork `awesome-dsh-plugin` and open the one-file PR
-  with the prepared YAML.
-- For future code changes, publish a new npm version; do not try to overwrite
-  `0.1.0` or `0.2.0`.
+- When you decide to list, open the one-file PR from the **upstream** compare
+  page (`awesome-dsh-plugin/awesome-dsh-plugin/compare/main...dustcpu:<branch>`),
+  not from the fork's own compare page — the latter creates a PR inside your own
+  fork that upstream never sees.
+- For future code changes, bump the version and publish a new one; never try to
+  overwrite a published version.
 
 ## 0. What the reviewer needs to see
 

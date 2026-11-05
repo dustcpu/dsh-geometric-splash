@@ -12,19 +12,19 @@ Visual harness: `preview/preview.html?mode=static` (runs the real client bundle 
 
 - **No progress bar, no buttons.** The frame is the gauge: width, height and radius grow from 380px to the full window as progress climbs, and the percentage is a large numeral inside its bottom edge.
 - The default **7.2s** is a fixed minimum timeline, not a timer-driven boot bar; the theme dock has a 1-12s slider. **Any bare key** dismisses the splash (modifier-only presses do not, and `F5` / `Ctrl+R` stay usable, so a reload never eats the intro).
-- The theme entry lives in the **conversation header utilities** (the app's top navigation bar, next to the folder / more / panel buttons) as a rotating Penrose icon; hover highlights it and speeds up the spin. The panel floats above the splash: ten palettes derived from Monument Valley and Geometric Islands, the intro slider, a once-a-day switch, a resident-mark switch, **Cinematic / Real** progress pacing, a preview action, and `localStorage` persistence. Nothing closes the panel.
+- The theme entry lives in the **conversation header utilities** (the app's top navigation bar, next to the folder / more / panel buttons) as a rotating Penrose icon; hover highlights it and leaves the spin rate alone (changing it would snap the angle). The panel floats above the splash: ten palettes derived from Monument Valley and Geometric Islands, the intro slider, a once-a-day switch, a resident-mark switch, a preview action, and `localStorage` persistence. Nothing closes the panel.
 - Palettes drive the background, frame, text, ocean tiles/grid, and the three Penrose faces; dark palettes also flip text/border contrast.
-- Cinematic progress follows the intro timeline (ease-out) but is clamped by real readiness: it can be slower than reality, never faster, and only reaches 100 when both the intro and startup finish.
+- Progress is cinematic only - the panel no longer offers a Real mode, since any key skips the intro anyway. It follows the intro timeline (ease-out) but is clamped by real readiness: it can be slower than reality, never faster, and only reaches 100 when both the intro and startup finish.
 
 ## The resident mark
 
 When the intro reaches 100% the sheet clears and the triangle flies to the left edge of the composer, where it stays as a small mark.
 
 - It reads DSH's own `data-streaming` / `data-process-activity` attributes, so it never scrapes rendered text and works in any UI language.
-- Five states: `idle` (slow spin + a gentle drift), `thinking`, `search`, `act`, `edit` - each with its own speed and its own three-tone ramp. Working states use fixed cool / cyan / amber / violet tones so they stay distinguishable on any palette; idle keeps the palette's own colours.
-- Spin speed is multiplied by the reasoning effort read off the model trigger (`Off / Low / High / Max`).
+- Five states: `idle`, `thinking`, `search`, `act`, `edit` - one constant 18s spin with no drift, and each state differs **only in colour**, never in pace. Working states use fixed cool / cyan / amber / violet tones so they stay distinguishable on any palette; idle keeps the palette's own colours.
+- Spin speed is multiplied by the reasoning effort read off the model trigger (`Off / Low / High / Max`, 0.5x to 1.7x, i.e. 36s to 10.6s per revolution) - the one pace change the user asked for, so it is the only one left.
 - Rotation is accumulated frame by frame rather than run as a CSS animation: changing `animation-duration` mid-flight makes the angle jump, which reads as a stutter.
-- Hidden when the viewport is narrow or the left gutter is too small.
+- Hidden when the viewport is narrow, the left gutter is too small, or a settings page replaces the composer.
 
 ## What is preserved
 
