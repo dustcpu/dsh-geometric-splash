@@ -1,6 +1,6 @@
 {
   "name": "dsh-splash",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "DSH startup splash overlay: a skippable Penrose/ocean intro, themeable palettes, and real boot milestones.",
   "type": "module",
   "main": "lib/index.js",
@@ -18,7 +18,7 @@
     "lib/client.js",
     "cordis.patch.yml",
     "README.md",
-    "README.zh.md",
+    "README.en.md",
     "CHANGELOG.md",
     "screenshots.json",
     "assets"

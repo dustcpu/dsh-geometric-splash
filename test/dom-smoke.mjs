@@ -19,7 +19,11 @@ class FakeElement {
     this.parentNode = null
     this.attributes = new Map()
     this.dataset = {}
-    this.style = { setProperty() {}, removeProperty() {} }
+    this.style = {
+      custom: new Map(),
+      setProperty(name, value) { this.custom.set(name, String(value)) },
+      removeProperty(name) { this.custom.delete(name) }
+    }
     this.className = ''
     this._text = ''
     this._html = ''
@@ -88,6 +92,11 @@ function walk(node, visit) {
 
 function matches(node, selector) {
   if (selector.startsWith('.')) return String(node.className).split(/\s+/).includes(selector.slice(1))
+  const contains = /^\[([^\]=*]+)\*="([^"]*)"\]$/.exec(selector)
+  if (contains) {
+    if (!node.attributes.has(contains[1])) return false
+    return String(node.attributes.get(contains[1])).includes(contains[2])
+  }
   if (selector.startsWith('[')) {
     const match = /^\[([^\]=]+)(?:="([^"]*)")?\]$/.exec(selector)
     if (!match) return false
@@ -154,8 +163,25 @@ class ResizeObserver {
   disconnect() {}
 }
 
+// Window listeners are recorded rather than dropped so keyboard handling can be
+// exercised: the skip rule is the only part of the splash that reads input.
+const windowListeners = new Map()
+function fireWindow(type, event) {
+  for (const handler of [...(windowListeners.get(type) ?? [])]) handler(event)
+}
+
+// A minimal localStorage so the persisted settings (and the once-a-day intro
+// claim) can be observed rather than silently falling back to defaults.
+const store = new Map()
+const localStorageStub = {
+  getItem: (key) => (store.has(key) ? store.get(key) : null),
+  setItem: (key, value) => { store.set(key, String(value)) },
+  removeItem: (key) => { store.delete(key) }
+}
+
 const window = {
   location: { search: '' },
+  localStorage: localStorageStub,
   devicePixelRatio: 2,
   requestAnimationFrame,
   cancelAnimationFrame,
@@ -163,9 +189,19 @@ const window = {
   clearTimeout,
   setInterval,
   clearInterval,
-  addEventListener() {},
-  removeEventListener() {},
+  addEventListener(type, handler) {
+    if (!windowListeners.has(type)) windowListeners.set(type, [])
+    windowListeners.get(type).push(handler)
+  },
+  removeEventListener(type, handler) {
+    const list = windowListeners.get(type)
+    if (list === undefined) return
+    const index = list.indexOf(handler)
+    if (index !== -1) list.splice(index, 1)
+  },
   matchMedia: () => ({ matches: false }),
+  innerWidth: 1440,
+  innerHeight: 810,
   __DSH_SPLASH__: { minVisibleMs: 2000 },
   __ModuleLoader__: {
     load(registration) { window.__registration = registration }
@@ -292,6 +328,12 @@ module.apply(ctx)
 const splash = document.querySelector('.dsh-splash')
 assert.ok(splash, 'cold boot paints the splash')
 
+// The full intro is a once-a-day ceremony: the launch has to be recorded, or
+// every launch would count as "first" and the shortening would never trigger.
+const launchRecord = store.get('dsh-splash:settings')
+assert.ok(launchRecord, 'settings are persisted during boot')
+assert.ok(JSON.parse(launchRecord).lastLaunchDate, 'first launch of the day is claimed for the full intro')
+
 // The persistent theme dock is an independent overlay entry; mount it with the
 // same fake React seat to exercise its imperative DOM builder.
 assert.ok(capturedComponents['dsh-splash-theme'], 'theme dock registered')
@@ -305,8 +347,35 @@ assert.ok(document.querySelector('.dsh-splash-theme-action'), 'theme trigger is 
 const dock = document.querySelector('.dsh-splash-theme-panel')
 assert.ok(dock, 'theme panel mounted')
 assert.equal(dock.querySelectorAll('.dsh-splash-dock__preset').length, 10, 'all palettes are listed')
-assert.equal(dock.querySelectorAll('.dsh-splash-dock__durations').length, 2, 'intro and progress groups are listed')
-assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 5, 'three intro lengths and two progress modes are listed')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__durations').length, 1, 'the progress group keeps its segmented row')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__duration').length, 2, 'two progress modes are listed')
+const introRange = dock.querySelector('.dsh-splash-dock__range')
+assert.ok(introRange, 'intro length is a range input')
+assert.equal(introRange.min, '1000', 'intro range starts at 1s')
+assert.equal(introRange.max, '12000', 'intro range ends at 12s')
+assert.equal(introRange.value, '7200', 'intro range defaults to the stored 7.2s')
+assert.equal(dock.querySelector('.dsh-splash-dock__readout-value').textContent, '7.2', 'readout mirrors the range value')
+const ceremony = dock.querySelector('.dsh-splash-dock__switch')
+assert.ok(ceremony, 'the once-a-day switch exists')
+assert.equal(ceremony.getAttribute('aria-checked'), 'true', 'the once-a-day switch defaults to on')
+assert.equal(dock.querySelectorAll('.dsh-splash-dock__switch').length, 2, 'the resident-mark switch sits next to it')
+const markSwitch = dock.querySelectorAll('.dsh-splash-dock__switch')[1]
+assert.equal(markSwitch.getAttribute('aria-checked'), 'true', 'the resident-mark switch defaults to on')
+markSwitch.dispatch('click')
+assert.equal(markSwitch.getAttribute('aria-checked'), 'false', 'clicking turns the resident mark off')
+assert.equal(JSON.parse(store.get('dsh-splash:settings')).mark, false, 'the mark choice is persisted')
+markSwitch.dispatch('click')
+assert.equal(markSwitch.getAttribute('aria-checked'), 'true', 'clicking again turns it back on')
+ceremony.dispatch('click')
+assert.equal(ceremony.getAttribute('aria-checked'), 'false', 'clicking turns the ceremony off')
+assert.equal(JSON.parse(store.get('dsh-splash:settings')).dailyOnce, false, 'the switch choice is persisted')
+ceremony.dispatch('click')
+assert.equal(ceremony.getAttribute('aria-checked'), 'true', 'clicking again turns it back on')
+introRange.value = '4500'
+introRange.dispatch('input')
+assert.equal(dock.querySelector('.dsh-splash-dock__readout-value').textContent, '4.5', 'dragging updates the readout without re-rendering the panel')
+introRange.value = '7200'
+introRange.dispatch('input')
 assert.ok(document.querySelector('style[data-plugin-css="dsh-splash/dock.css"]'), 'dock stylesheet exists')
 
 // Live palette switch while the splash is still on screen.
@@ -317,7 +386,7 @@ assert.equal(splash.dataset.palette, 'island-night', 'palette switches live on t
 assert.equal(splash.parentNode, body)
 assert.ok(capturedComponent, 'shell.overlay seat registered while booting')
 
-const pct = () => Number((document.querySelector('.dsh-splash__pct')?.textContent ?? '0%').replace('%', ''))
+const pct = () => Number((document.querySelector('.dsh-splash__pct-num')?.textContent ?? '0').replace('%', ''))
 const hasSplash = () => document.querySelector('.dsh-splash') !== null
 
 setActive(8)
@@ -375,4 +444,58 @@ assert.ok(document.querySelector('.dsh-splash'), 'theme preview paints a splash'
 await waitFor(() => document.querySelector('.dsh-splash') === null, 7000, 'theme preview fade-out')
 console.log('ok: theme preview lifecycle complete')
 
+// Ctrl+<key> belongs to the app — reload, command palette, devtools — and must
+// not be read as "dismiss the splash". A bare key still skips, so a splash stuck
+// on a stalled milestone can never trap the user.
+previewButton.dispatch('click')
+const keySplash = document.querySelector('.dsh-splash')
+assert.ok(keySplash, 'preview splash painted for the key test')
+const press = (value, extra) =>
+  Object.assign({ key: value, repeat: false, ctrlKey: false, metaKey: false, altKey: false }, extra)
+fireWindow('keydown', press('r', { ctrlKey: true }))
+fireWindow('keydown', press('k', { ctrlKey: true }))
+fireWindow('keydown', press('I', { ctrlKey: true, shiftKey: true }))
+await sleep(120)
+assert.equal(document.querySelector('.dsh-splash'), keySplash, 'Ctrl+R / Ctrl+K / Ctrl+Shift+I leave the splash alone')
+fireWindow('keydown', press('x'))
+await waitFor(() => document.querySelector('.dsh-splash') === null, 3000, 'bare key skips the splash')
+console.log('ok: modifier chords are ignored, a bare key still skips')
+
 console.log(`ok: ${samples.length} progress samples, monotonic, splash lifecycle complete (peak ${samples[samples.length - 1]}%)`)
+
+// The resident mark: mounted before the intro ends (the flying triangle needs
+// somewhere to aim), then driven by the host's own activity attributes rather
+// than by scraping rendered text.
+const mark = document.querySelector('.dsh-mark')
+assert.ok(mark, 'the resident mark is mounted')
+assert.equal(mark.dataset.state, 'idle', 'it idles while no turn is running')
+const idleFace = mark.style.custom.get('--dsh-mark-c1')
+assert.ok(idleFace, 'the mark paints its faces from the palette')
+
+const streamingFlag = document.createElement('div')
+streamingFlag.setAttribute('data-streaming', '')
+body.appendChild(streamingFlag)
+const activityFlag = document.createElement('div')
+activityFlag.setAttribute('data-process-activity', 'commands')
+body.appendChild(activityFlag)
+const effortTrigger = document.createElement('button')
+effortTrigger.setAttribute('aria-label', '选择模型，当前 DeepSeek-V4.1-Flash，推理等级 Max')
+body.appendChild(effortTrigger)
+
+await sleep(900)
+assert.equal(mark.dataset.state, 'act', 'a running command turn spins the mark up')
+assert.equal(mark.dataset.effort, '1.45', 'max effort speeds it up')
+assert.notEqual(mark.style.custom.get('--dsh-mark-c1'), idleFace, 'each state gets its own hue')
+
+activityFlag.setAttribute('data-process-activity', 'webSearch')
+await sleep(900)
+assert.equal(mark.dataset.state, 'search', 'a web search reads as scanning')
+
+activityFlag.setAttribute('data-process-activity', 'write')
+await sleep(900)
+assert.equal(mark.dataset.state, 'edit', 'writing a file holds one face lit')
+
+streamingFlag.parentNode.removeChild(streamingFlag)
+await sleep(900)
+assert.equal(mark.dataset.state, 'idle', 'it settles back when the turn ends')
+console.log('ok: resident mark follows activity and effort')

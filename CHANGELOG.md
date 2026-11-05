@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.2.1 — 2026-11-05
+
+- **The frame is the progress gauge.** Removed the progress bar and the two
+  splash buttons; the percentage is now a large numeral inside the frame's
+  bottom edge, scaling with its width. The frame grows from a 380px porthole to
+  the full window as progress climbs (`(p/100)^1.7`), so 100% leaves nothing but
+  the mark and the sea.
+- **Skip is keyboard-only**: any bare key. Modifier chords (`Ctrl+R`, `Ctrl+K`,
+  `Ctrl+Shift+I`) and `F1`-`F12` are ignored so the app stays usable, while a
+  plain key still exits — a stuck splash can never trap the user.
+- **The triangle no longer scales** with the frame, and spins at 18s instead of
+  24s.
+- **Intro length is a 1-12s slider** instead of three presets. The theme panel
+  also gained a **full intro once a day** switch: the first launch of the day
+  plays the full ceremony, later launches the same day are capped at 2.2s.
+- **New resident mark.** When the intro ends the triangle flies to the left edge
+  of the composer and stays there as a small status mark. It reads DSH's own
+  `data-streaming` / `data-process-activity` attributes — no text scraping, so it
+  works in any UI language — and folds fifteen activities into five states
+  (idle / thinking / search / act / edit), each with its own spin speed and
+  three-tone palette. Spin speed is multiplied by the reasoning effort read from
+  the model trigger (`Off` / `Low` / `High` / `Max`). Rotation is accumulated
+  frame by frame rather than driven by a CSS animation, so changing speed never
+  snaps the angle back.
+- **New icon**: a transparent 512x512 RGBA Penrose triangle instead of the old
+  "splash page thumbnail", so it sits properly beside DSH's dark plugin icons.
+- Settings gained `dailyOnce` and `mark`; both are exposed in the theme panel.
+- README is Chinese by default; the English version lives in `README.en.md`.
+
 ## 0.2.0 — 2026-11-04
 
 - Cinematic intro timeline: 7.2s default, 3.8s / 10s choices, with a visible
