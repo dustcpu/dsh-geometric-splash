@@ -13,13 +13,19 @@ DSH 启动开屏插件：彭罗斯三角在等距菱格海面上旋转受光，*
 
 ## 安装
 
-```powershell
-dsh plugin --profile desktop add dsh-splash
+**DSH 桌面版**：打开「插件」页，在插件市场里找到 dsh-splash，点安装即可。
+
+**命令行**（DSH Web 版，或你知道自己的 profile 名时）：
+
+```sh
+dsh plugin --profile <你的 profile 名> add dsh-splash
 ```
 
-通过插件市场安装同样适用，无需手动改配置。
+> ⚠️ 桌面版的 profile 由应用自己管理，命令行里的 profile 名写错会装到别的 profile 去，在桌面版里看不到。桌面版请直接用上面的市场安装。
+>
+> ⚠️ DSH 给 profile 配了 pnpm 的**发布等待期**（`minimumReleaseAge`），刚发布的新版本在等待期里会被挡住，`add dsh-splash` 可能装到较旧的版本。想装最新版就指定版本号：`add dsh-splash@0.2.3`——pnpm 会自动把它加进 profile 的 `minimumReleaseAgeExclude` 放行。
 
-本地开发版（link）：
+**本地开发版**（link）：
 
 ```powershell
 dsh plugin --profile desktop add "link:C:\path\to\dsh-splash"

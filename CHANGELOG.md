@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.2.4 — 2026-11-05
+
+- **The plugin page no longer reads like a wall of text.** DSH renders
+  `README.md` verbatim into the plugin page, and the file used to carry all
+  6170 characters of it — prose, development notes and milestone tables — to
+  anyone who only wanted to know what the plugin does. The README now holds
+  the intro, the effects at a glance, installation, configuration and the
+  known boundaries (1585 characters); everything else moved to
+  `README.developer.md`, which the README links to. The English pair mirrors
+  the split.
+- **Two things that were buttons on GitHub but read as plain text in the app
+  are gone.** The `**简体中文** | [English]` switch pointed nowhere in DSH —
+  it only ever reads `README.md`, whose pattern (`/^readme(?:\.md|\.markdown)?$/i`)
+  never matches `README.en.md`, and there is no locale picker. The centred
+  `<p align="center"><img>` icon was ignored by the layout engine and sat hard
+  left, duplicating the icon the page already shows.
+- **The parameter tables are lists now.** GFM tables render, but those columns
+  were wide enough to squeeze in the plugin page's narrow container.
+- **The install section says what actually works.** DSH manages the desktop
+  profile itself, so a command-line install can land in a profile the desktop
+  app never reads. It also gives profiles pnpm's release-age wait, so a fresh
+  version can be held back — naming the version gets the latest one and pnpm
+  then allows it automatically.
+
 ## 0.2.3 — 2026-11-05
 
 - **Fixed: the mark no longer follows settings pages.** The composer lookup

@@ -13,13 +13,19 @@ A DSH startup splash: a Penrose triangle light-sweep over a living isometric dia
 
 ## Install
 
-```powershell
-dsh plugin --profile desktop add dsh-splash
+**DSH Desktop**: open the **Plugins** page, find dsh-splash in the plugin market and click install.
+
+**Command line** (DSH Web, or when you know your profile name):
+
+```sh
+dsh plugin --profile <your profile name> add dsh-splash
 ```
 
-Installing through the plugin market works the same way; no manual configuration needed.
+> ⚠️ Desktop manages its own profile. A wrong profile name on the command line installs into a profile the desktop app never reads, so the plugin will not appear there. On Desktop, use the market install above.
+>
+> ⚠️ DSH gives profiles pnpm's **release-age wait** (`minimumReleaseAge`), so a freshly published version can be held back and `add dsh-splash` may pick an older one. Name the version to get the latest: `add dsh-splash@0.2.3` — pnpm then adds it to the profile's `minimumReleaseAgeExclude` automatically.
 
-Local development build (link):
+**Local development build** (link):
 
 ```powershell
 dsh plugin --profile desktop add "link:C:\path\to\dsh-splash"
