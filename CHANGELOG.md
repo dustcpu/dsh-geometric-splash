@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.3 — 2026-11-05
+
+- **Fixed: the mark no longer follows settings pages.** The composer lookup
+  used to fall back to any `<textarea>`, and the plugin settings page has one
+  (the env-var box) — the mark parked itself beside that panel and rode along
+  with its scroll. Only the rich-text editor qualifies as an anchor now, and
+  a card that has left the viewport hides the mark entirely.
+- **Fixed: the mark no longer slides when the composer grows.** Pasting a
+  screenshot or wrapping a long line grows the card upward, so its vertical
+  centre climbs. The mark is anchored to the bottom edge instead — the one
+  line that does not move — and only falls back to centring on cards shorter
+  than the mark itself.
+
 ## 0.2.2 — 2026-11-05
 
 - **The resident mark reports state by colour alone.** Speed is now one constant
