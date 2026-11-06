@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "dsh-splash",
+    "description": "A geometric boot screen whose frame is the progress gauge, paced by real startup; any key skips it, and the triangle stays beside the composer as a status mark."
+  }
+}

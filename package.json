@@ -1,7 +1,7 @@
 {
   "name": "dsh-splash",
   "version": "0.2.4",
-  "description": "DSH startup splash overlay: a skippable Penrose/ocean intro, themeable palettes, and real boot milestones.",
+  "description": "A geometric boot screen whose frame is the progress gauge, paced by real startup; any key skips it, and the triangle stays beside the composer as a status mark.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -11,6 +11,7 @@
     "./client": {
       "default": "./lib/client.js"
     },
+    "./locale/*.json": "./locale/*.json",
     "./package.json": "./package.json"
   },
   "files": [
@@ -22,6 +23,7 @@
     "README.developer.md",
     "README.developer.en.md",
     "CHANGELOG.md",
+    "locale/*.json",
     "assets"
   ],
   "keywords": [

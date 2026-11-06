@@ -1,7 +1,31 @@
 # Changelog
 
-## 0.2.4 — 2026-11-05
+## 0.2.4 — 2026-11-06
 
+- **The palette picker is a wall of colour cards, not a ten-row list.** Every
+  palette shows four stops — the background, then the triangle's three faces
+  from dark to light — so the choice can be made by looking instead of reading.
+  Names surface on hover and stay on the selected card; the list cost ten rows
+  of height, the 2x5 grid costs five.
+- **The dock now says whether a newer version exists.** It asks the market's
+  public update API (v1) what is installed and whether anything newer is
+  published, and offers the update when there is one. Nothing is invented when
+  the market is not there: the row hides itself, a linked checkout is reported
+  as a local build rather than "up to date" because there is nothing to compare
+  it against, and a host-managed install is labelled as such instead of
+  pretending a button would stick.
+- **The plugin speaks Chinese in the plugin manager.** `locale/zh.json` and
+  `locale/en.json` carry the title and description the manager reads without
+  activating the plugin; the Chinese line is 「不可能三角开屏动画，让每一次启动
+  充满仪式感」.
+- **The exit is one motion instead of two.** The triangle's flight to the
+  composer and the fade of the full-screen sheet now start on the same frame
+  and run for the same 900ms. Before, the sheet finished first and the last
+  thing on screen was a fully opaque surface, so removing the node read as a
+  cut. What fades is the painting, not the surface: background colour, frame
+  colour, the sea and the glow, while the triangle stays fully opaque above
+  them — fading the root instead would have dissolved the thing that is meant
+  to be flying.
 - **The plugin page no longer reads like a wall of text.** DSH renders
   `README.md` verbatim into the plugin page, and the file used to carry all
   6170 characters of it — prose, development notes and milestone tables — to
