@@ -21,29 +21,27 @@ day.
 
 ## Current status
 
-As of 2026-11-04:
+As of 2026-11-07:
 
 - The repository is renamed to **`dustcpu/dsh-geometric-splash`** (done). GitHub
   preserves history, `v0.1.0`, the topic, and the creation date; the old URL
   redirects.
-- The working tree, `package.json`, README, catalog YAML, and PR body point at
-  `dustcpu/dsh-geometric-splash`; `main` and the prepared commit are pushed.
+- `main` is at the 0.2.5 release commit `0e46549`, tagged **`v0.2.5`** and pushed.
 - npm CLI is authenticated as `dusttttt`; 2FA is enabled with
-  `"mode": "auth-and-writes"`. **`dsh-splash@0.2.2` is the current release**;
-  `npm view dsh-splash version` returns `0.2.2`, and the package's `repository`
-  points at `dustcpu/dsh-geometric-splash`.
-- Published so far: `0.0.0-stage` → `0.1.0` → `0.2.0` → `0.2.1` → `0.2.2`.
-  `0.2.2` is the first release with the resident status mark fully settled:
-  colour-only states, constant spin, angle-continuous landing, per-frame flight
-  correction, and the finalised palette names.
+  `"mode": "auth-and-writes"` and the security key/passkey. **`dsh-splash@0.2.5`
+  is the current release**; `npm view dsh-splash version` returns `0.2.5`, and
+  the package's `repository` points at `dustcpu/dsh-geometric-splash`.
+- Published so far: `0.0.0-stage` → `0.1.0` → `0.2.0` → `0.2.1` → `0.2.2` →
+  `0.2.3` → `0.2.4` → `0.2.5`. 0.2.5 adds the seven-state resident mark, the
+  original angle-driven face lighting, white edge highlights, the edit flip and
+  state-change sparkles; it also includes the 0.2.4 README split and palette
+  refresh.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
-- Ready catalog entry and PR body:
-  [market/dustcpu__dsh-geometric-splash.yml](market/dustcpu__dsh-geometric-splash.yml),
-  [market/PR-body.md](market/PR-body.md).
-- **Catalog submission is intentionally deferred.** The repository can stay
-  public and the npm package is already published without listing it; open the
-  catalog PR whenever you are ready (after the 24-hour age gate).
+- Catalog PR **#12370** is open upstream and waiting for merge; the catalog entry
+  and PR body are in
+  [market/dustcpu__dsh-geometric-splash.yml](market/dustcpu__dsh-geometric-splash.yml)
+  and [market/PR-body.md](market/PR-body.md). Do not open a duplicate PR.
 
 Next:
 
