@@ -1,6 +1,6 @@
 {
   "name": "dsh-splash",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A geometric boot screen whose frame is the progress gauge, paced by real startup; any key skips it, and the triangle stays beside the composer as a status mark.",
   "type": "module",
   "main": "lib/index.js",

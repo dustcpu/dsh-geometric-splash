@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.2.5 — 2026-11-07
+
+- **The resident mark now reports seven states.** `questions` gets its own
+  `waiting` state, and `read` / `readImage` get a `read` state instead of being
+  folded into search. The activity comes from the live process group's
+  `data-shimmer` title, so a running read/write/command no longer falls back to
+  idle just because no text is streaming; closed historical groups are ignored.
+- **State no longer recolours the triangle.** Every state keeps the selected
+  palette. State is carried by a white highlight layer on the geometry instead:
+  a short segment loops the perimeter for thinking and quickly for acting,
+  search lights one whole edge at a time, waiting breathes the full outline,
+  and reading pulses the right edge.
+- **The faces light the way the website avatar does.** A fixed upper-left light
+  runs each arm through the original `lit1/2/3` phase table as the mark turns,
+  so the bright and dark faces actually alternate. It is computed from the same
+  angle as the rotation, so reasoning-effort changes do not desynchronise the
+  light.
+- **The triangle flips for editing** instead of flashing a vertex: the whole SVG
+  turns 180° over 720ms and holds until the state ends. The outline is thinner
+  (2.4 instead of 6), closer to the site avatar.
+- **State changes sparkle, they do not spray.** A change lights 8–10 small
+  stars in the area around the mark for about 0.8s; there is no particle burst,
+  no movement, and no sparkle at idle.
+- **A stale HMR mark is removed** before a new one is mounted, so two triangles
+  can no longer overlap after the client plugin reloads.
+- **Four palettes were refreshed** and three names changed: `island-amber` is now
+  「落日熔金」 / Molten Sunset, `island-night` is 「白露未晞」 / Dew Before Dawn,
+  `warm-gold` is 「荷塘晓色」 / Lotus Dawn. IDs are unchanged, so saved choices
+  survive. The 0.2.4 README split and install rewrite are included in this
+  release because 0.2.4 was committed but never published.
+
 ## 0.2.4 — 2026-11-06
 
 - **The palette picker is a wall of colour cards, not a ten-row list.** Every

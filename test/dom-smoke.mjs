@@ -467,34 +467,60 @@ console.log(`ok: ${samples.length} progress samples, monotonic, splash lifecycle
 // than by scraping rendered text.
 const mark = document.querySelector('.dsh-mark')
 assert.ok(mark, 'the resident mark is mounted')
+assert.equal(document.querySelectorAll('.dsh-mark').length, 1, 'only one resident mark is mounted')
 assert.equal(mark.dataset.state, 'idle', 'it idles while no turn is running')
 const idleFace = mark.style.custom.get('--dsh-mark-c1')
 assert.ok(idleFace, 'the mark paints its faces from the palette')
 
-const streamingFlag = document.createElement('div')
-streamingFlag.setAttribute('data-streaming', '')
-body.appendChild(streamingFlag)
 const activityFlag = document.createElement('div')
 activityFlag.setAttribute('data-process-activity', 'commands')
+const shimmer = document.createElement('span')
+shimmer.setAttribute('data-shimmer', '')
+activityFlag.appendChild(shimmer)
 body.appendChild(activityFlag)
 const effortTrigger = document.createElement('button')
 effortTrigger.setAttribute('aria-label', '选择模型，当前 DeepSeek-V4.1-Flash，推理等级 Max')
 body.appendChild(effortTrigger)
 
 await sleep(900)
-assert.equal(mark.dataset.state, 'act', 'a running command turn switches the mark to its act colour')
+assert.equal(mark.dataset.state, 'act', 'a live process group with no data-streaming still reaches act')
 assert.equal(mark.dataset.effort, '1.7', 'max effort scales the spin rate')
-assert.notEqual(mark.style.custom.get('--dsh-mark-c1'), idleFace, 'each state gets its own hue')
+assert.equal(mark.style.custom.get('--dsh-mark-c1'), idleFace, 'state changes keep the palette face colour')
 
 activityFlag.setAttribute('data-process-activity', 'webSearch')
 await sleep(900)
 assert.equal(mark.dataset.state, 'search', 'a web search reads as scanning')
 
+activityFlag.setAttribute('data-process-activity', 'read')
+await sleep(900)
+assert.equal(mark.dataset.state, 'read', 'reading a file gets its own state')
+
 activityFlag.setAttribute('data-process-activity', 'write')
 await sleep(900)
-assert.equal(mark.dataset.state, 'edit', 'writing a file changes the tone, not the pace')
+assert.equal(mark.dataset.state, 'edit', 'writing a file still reads as edit')
 
+activityFlag.setAttribute('data-process-activity', 'questions')
+await sleep(900)
+assert.equal(mark.dataset.state, 'waiting', 'waiting for the user is not folded into thinking')
+
+// A closed historical group must not keep reporting its old activity.
+shimmer.parentNode.removeChild(shimmer)
+const streamingFlag = document.createElement('div')
+streamingFlag.setAttribute('data-streaming', '')
+body.appendChild(streamingFlag)
+activityFlag.setAttribute('data-process-activity', 'commands')
+await sleep(900)
+assert.equal(mark.dataset.state, 'thinking', 'closed groups are ignored while only text streams')
+
+// Terminal blocks can run without a process header (or text streaming).
 streamingFlag.parentNode.removeChild(streamingFlag)
+const runningFlag = document.createElement('div')
+runningFlag.setAttribute('data-running', '')
+body.appendChild(runningFlag)
+await sleep(900)
+assert.equal(mark.dataset.state, 'act', 'a running terminal falls back to act')
+
+runningFlag.parentNode.removeChild(runningFlag)
 await sleep(900)
 assert.equal(mark.dataset.state, 'idle', 'it settles back when the turn ends')
-console.log('ok: resident mark follows activity and effort')
+console.log('ok: resident mark follows live activity and effort')

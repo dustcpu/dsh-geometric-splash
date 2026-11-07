@@ -43,8 +43,8 @@
 
 色板来源：
 
-- **Monument Valley**（`E:\mv-refs\palette.json`）：丁香之绽（默认）、紫金一瞬、青绿山水、陶土记忆、月下幽紫。
-- **Geometric Islands**（`E:\web\Geometric Islands\style.css`）：碧空如洗、芽头新绿、风起黄昏、薰衣旧梦、夜生白露。
+- **Monument Valley**（`E:\mv-refs\palette.json`）：丁香之绽（默认）、荷塘晓色、青绿山水、陶土记忆、月下幽紫。
+- **Geometric Islands**（`E:\web\Geometric Islands\style.css`）：碧空如洗、芽头新绿、落日熔金、薰衣旧梦、白露未晞。
 
 ## 开发流程
 
