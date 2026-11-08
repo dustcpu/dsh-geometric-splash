@@ -21,21 +21,22 @@ day.
 
 ## Current status
 
-As of 2026-11-07:
+As of 2026-11-08:
 
 - The repository is renamed to **`dustcpu/dsh-geometric-splash`** (done). GitHub
   preserves history, `v0.1.0`, the topic, and the creation date; the old URL
   redirects.
-- `main` is at the 0.2.5 release commit `0e46549`, tagged **`v0.2.5`** and pushed.
+- The 0.2.6 release commit is `9cb7721`, tagged **`v0.2.6`** and pushed.
 - npm CLI is authenticated as `dusttttt`; 2FA is enabled with
-  `"mode": "auth-and-writes"` and the security key/passkey. **`dsh-splash@0.2.5`
-  is the current release**; `npm view dsh-splash version` returns `0.2.5`, and
+  `"mode": "auth-and-writes"` and the security key/passkey. **`dsh-splash@0.2.6`
+  is the current release**; `npm view dsh-splash version` returns `0.2.6`, and
   the package's `repository` points at `dustcpu/dsh-geometric-splash`.
 - Published so far: `0.0.0-stage` → `0.1.0` → `0.2.0` → `0.2.1` → `0.2.2` →
-  `0.2.3` → `0.2.4` → `0.2.5`. 0.2.5 adds the seven-state resident mark, the
-  original angle-driven face lighting, white edge highlights, the edit flip and
-  state-change sparkles; it also includes the 0.2.4 README split and palette
-  refresh.
+  `0.2.3` → `0.2.4` → `0.2.5` → `0.2.6`. 0.2.6 adds the twelve-palette set
+  (Desert Oasis / Prism Flow rebuilt, Peach Lime / Sakura Dream added), retunes
+  Desert Oasis, Peach Lime and Sakura Dream against MV3 Ch07, and loops the edit
+  flip every 5.6s. The recording gallery in `demo/` is in the repo but not the
+  npm package.
 - `assets/icon-512.png` is added; the catalog YAML references it.
 - `.github/workflows/smoke.yml` runs `node test/dom-smoke.mjs` on every push.
 - Catalog PR **#12370** is open upstream and waiting for merge; the catalog entry
