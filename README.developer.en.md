@@ -28,22 +28,22 @@ Because `shell.overlay` only exists after the React app mounts, the plugin paint
 - The Penrose triangle rotates in place once every 18s, its three faces cycling through the palette's light/mid/dark colours over the same 18s. The ocean is a double-sine wave displacing an isometric diamond grid; each diamond mixes the palette's low/high colours by its average height and is stroked in the grid colour.
 - The frame emerges over the intro's first ~1.6s and grows with the progress.
 - On 100% the sheet dissolves and the triangle flies to the composer's left edge; canvas, styles, timers and listeners are all released.
-- The resident mark turns at a constant rate (18s per revolution, no drift), reads DSH's own `data-process-activity` attribute, and switches **colour only, never pace**, across four working states — changing the pace would read as struggling. Its speed follows the reasoning effort alone, and the four steps are far apart (`Off 0.5x / Low 0.72x / High 1x / Max 1.7x`, i.e. 36s down to 10.6s per revolution). It hides itself when the viewport is narrow, the left gutter is too small, or a settings page replaces the composer.
-- The theme entry is the small Penrose icon in the conversation header's utilities (next to the folder / more / panel buttons); hovering highlights it but leaves the spin rate alone — changing it would snap the angle. The panel offers ten palettes, an intro-length slider, a once-a-day switch, a resident-mark switch and a preview; nothing closes it, and it is still open after a preview finishes. Palette changes apply live while the splash is on screen; the intro length takes effect on the next splash.
-- Palettes drive the background, frame, text, ocean tiles/grid and the three Penrose faces; dark palettes also flip text/border contrast. The resident mark keeps the palette's own triangle colours while idle, and switches to four fixed working colours (cool steel blue / cyan / amber / violet) once the agent works, so the states stay distinguishable on any palette. Settings live in `localStorage` (`dsh-splash:settings`) — they never touch the host config and do not sync across devices.
+- The resident mark turns at a constant rate (18s per revolution, no drift), reads DSH's own `data-process-activity` attribute, and switches across seven states — idle, thinking, waiting, reading, searching, acting and editing. The triangle **always keeps the selected theme colour**; state is carried by white edge highlights (a perimeter trace for thinking/acting, one edge at a time for search, a full-outline breath for waiting), an edit flip, and state-change sparkles. Its speed follows the reasoning effort alone, and the four steps are far apart (`Off 0.5x / Low 0.72x / High 1x / Max 1.7x`, i.e. 36s down to 10.6s per revolution). It hides itself when the viewport is narrow, the left gutter is too small, or a settings page replaces the composer.
+- The theme entry is the small Penrose icon in the conversation header's utilities (next to the folder / more / panel buttons); hovering highlights it but leaves the spin rate alone — changing it would snap the angle. The panel offers twelve palettes, an intro-length slider, a once-a-day switch, a resident-mark switch and a preview; nothing closes it, and it is still open after a preview finishes. Palette changes apply live while the splash is on screen; the intro length takes effect on the next splash.
+- Palettes drive the background, frame, text, ocean tiles/grid and the three Penrose faces; dark palettes also flip text/border contrast. The resident mark keeps the palette's own colours in **every** state; its three faces follow the original page's fixed upper-left lighting phases as the mark turns, and state changes no longer recolour it. Settings live in `localStorage` (`dsh-splash:settings`) — they never touch the host config and do not sync across devices.
 - Rotation is accumulated frame by frame rather than run as a CSS animation: changing `animation-duration` mid-flight makes the angle jump, which reads as a stutter.
 
 ## The theme dock
 
 The entry lives in the conversation header's utilities (next to the folder / more / panel buttons) as a small Penrose icon. Hovering highlights it, but the spin rate stays put — changing it would snap the angle.
 
-The panel offers ten palettes, an intro-length slider (1-12s), a once-a-day switch, a resident-mark switch and a local preview. Nothing closes the panel; it is still open after a preview finishes.
+The panel offers twelve palettes, an intro-length slider (1-12s), a once-a-day switch, a resident-mark switch and a local preview. Nothing closes the panel; it is still open after a preview finishes.
 
 Palette changes apply live while the splash is on screen; the intro length takes effect on the next splash. Settings live in `localStorage` (`dsh-splash:settings`) — they never touch the host config and do not sync across devices.
 
 Where the palettes come from:
 
-- **Monument Valley** (`E:\mv-refs\palette.json`): 丁香之绽 (default), 荷塘晓色, 青绿山水, 陶土记忆, 月下幽紫.
+- **Monument Valley** (`E:\mv-refs\palette.json`): 丁香之绽 (default), 荷塘晓色, 沙漠绿洲, 陶土记忆, 彩阶流光, 蜜桃青柠, 樱花遗梦.
 - **Geometric Islands** (`E:\web\Geometric Islands\style.css`): 碧空如洗, 芽头新绿, 落日熔金, 薰衣旧梦, 白露未晞.
 
 ## Development workflow
@@ -72,7 +72,7 @@ Rules that matter:
 node test/dom-smoke.mjs
 ```
 
-This executes the real `lib/client.js` under a Node DOM shim and verifies cold-boot detection, real loader counts, monotonic progress, `shell.overlay` adoption, fade-out and cleanup, the theme dock (ten palettes, the length slider, both switches, the preview lifecycle), and the resident mark's five states with their reasoning-effort multipliers. `preview/preview.html?mode=static` is a pure front-end visual harness (real bundle + fake services); open it in a browser.
+This executes the real `lib/client.js` under a Node DOM shim and verifies cold-boot detection, real loader counts, monotonic progress, `shell.overlay` adoption, fade-out and cleanup, the theme dock (twelve palettes, the length slider, both switches, the preview lifecycle), and the resident mark's seven states, white highlights and reasoning-effort multipliers. `preview/preview.html?mode=static` is a pure front-end visual harness (real bundle + fake services); open it in a browser.
 
 ## Debugging switches
 

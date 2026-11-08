@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dsh-splash · EDIT</title>
+<link rel="stylesheet" href="demo.css">
+</head>
+<body data-demo="edit">
+  <div class="eyebrow">dsh-splash · resident mark · recording harness</div>
+  <h1 id="state-name">EDIT</h1>
+  <p id="effect-name">编辑文件 · 循环翻转 180° · 保持后翻回</p>
+  <p id="hint">真实 bundle · 46px 标记放大 2.2× · 建议窗口 1440×900</p>
+  <div id="dots">
+    <span data-dot="idle"></span>
+    <span data-dot="thinking"></span>
+    <span data-dot="waiting"></span>
+    <span data-dot="read"></span>
+    <span data-dot="search"></span>
+    <span data-dot="act"></span>
+    <span data-dot="edit" data-on="true"></span>
+    <small>holding state</small>
+  </div>
+  <button id="replay">重播翻转</button>
+
+  <div id="fx-card">
+    <div id="fx-editor" contenteditable="true">dsh-splash recording harness</div>
+    <button id="fx-model" aria-label="选择模型，当前 DeepSeek-V4.1-Flash，推理等级 High">DeepSeek-V4.1-Flash · High</button>
+  </div>
+
+  <div class="footer">actual client bundle · no mocks for the mark · state held</div>
+
+  <script>
+    window.DEMO_STATE = 'edit';
+    
+  </script>
+  <script src="harness.js"></script>
+</body>
+</html>

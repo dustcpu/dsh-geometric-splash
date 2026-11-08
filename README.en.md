@@ -10,7 +10,7 @@ A DSH startup splash: a Penrose triangle light-sweep over a living isometric dia
 - **The ending:** on 100% it holds for a beat, then the triangle flies to the left edge of the composer and shrinks into the resident mark.
 - **The resident mark** turns at a constant rate across six working states — thinking, waiting, reading, searching, acting and editing — and **always keeps the selected theme colour**; changing state no longer recolours the triangle. Its speed follows the reasoning effort (`Off / Low / High / Max`).
 - **State cues:** a white/bright highlight travels on the triangle's edges (thinking/act loop, search lights one edge at a time, waiting breathes the whole outline); edit flips the triangle over. State changes sparkle a few small stars around it instead of emitting particles. The three faces also alternate light/dark with angle, matching the original page's fixed-upper-left lighting.
-- **Ten palettes**, derived from Monument Valley and Geometric Islands, live in the theme dock behind a small Penrose icon in the conversation header.
+- **Twelve palettes**, derived from Monument Valley and Geometric Islands, live in the theme dock behind a small Penrose icon in the conversation header.
 
 ## Install
 
@@ -24,7 +24,7 @@ dsh plugin --profile <your profile name> add dsh-splash
 
 > ⚠️ Desktop manages its own profile. A wrong profile name on the command line installs into a profile the desktop app never reads, so the plugin will not appear there. On Desktop, use the market install above.
 >
-> ⚠️ DSH gives profiles pnpm's **release-age wait** (`minimumReleaseAge`), so a freshly published version can be held back and `add dsh-splash` may pick an older one. Name the version to get the latest: `add dsh-splash@0.2.5` — pnpm then adds it to the profile's `minimumReleaseAgeExclude` automatically.
+> ⚠️ DSH gives profiles pnpm's **release-age wait** (`minimumReleaseAge`), so a freshly published version can be held back and `add dsh-splash` may pick an older one. Name the version to get the latest: `add dsh-splash@0.2.6` — pnpm then adds it to the profile's `minimumReleaseAgeExclude` automatically.
 
 **Local development build** (link):
 

@@ -1,0 +1,166 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0e15;
+  color: #eef3fa;
+  font-family: "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 78% 74%, rgba(99, 132, 190, .13), transparent 32%),
+    radial-gradient(circle at 30% 20%, rgba(158, 96, 145, .08), transparent 28%),
+    linear-gradient(180deg, #0a0e15 0%, #0d121b 100%);
+}
+
+.eyebrow {
+  position: fixed;
+  left: 64px;
+  top: 54px;
+  color: #6f7d91;
+  font: 12px/1.4 Consolas, "Cascadia Mono", monospace;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+#state-name {
+  position: fixed;
+  left: 62px;
+  top: 78px;
+  margin: 0;
+  color: #f1f5fb;
+  font-size: clamp(48px, 5.2vw, 78px);
+  line-height: .98;
+  font-weight: 300;
+  letter-spacing: -.035em;
+}
+
+#effect-name {
+  position: fixed;
+  left: 66px;
+  top: 174px;
+  margin: 0;
+  color: #aebdce;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+#hint {
+  position: fixed;
+  left: 66px;
+  top: 204px;
+  margin: 0;
+  color: #65758a;
+  font-size: 13px;
+}
+
+#dots {
+  position: fixed;
+  left: 66px;
+  top: 246px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2f3a4b;
+  transition: background .35s ease, box-shadow .35s ease;
+}
+
+#dots span[data-on="true"] {
+  background: #f5f8ff;
+  box-shadow: 0 0 12px rgba(230, 239, 255, .8);
+}
+
+#dots small {
+  margin-left: 8px;
+  color: #58677a;
+  font: 11px/1 Consolas, monospace;
+  letter-spacing: .08em;
+}
+
+#fx-card {
+  position: fixed;
+  left: 900px;
+  bottom: 100px;
+  width: 400px;
+  height: 96px;
+  border: 1px solid #283244;
+  border-radius: 17px;
+  background: linear-gradient(180deg, #151b26, #111721);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .35);
+  z-index: 1;
+}
+
+#fx-editor {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 16px;
+  bottom: 34px;
+  color: #5f7085;
+  font-size: 14px;
+  outline: none;
+}
+
+#fx-model {
+  position: absolute;
+  right: 14px;
+  bottom: 9px;
+  border: 0;
+  background: transparent;
+  color: #61748a;
+  font: 11px/1.3 Consolas, monospace;
+}
+
+#replay {
+  position: fixed;
+  left: 66px;
+  top: 286px;
+  display: none;
+  border: 1px solid #334156;
+  border-radius: 8px;
+  background: #121924;
+  color: #b9c7d8;
+  padding: 7px 12px;
+  font: 12px/1 "Microsoft YaHei", sans-serif;
+  cursor: pointer;
+}
+
+#replay:hover { border-color: #5b7393; color: #fff; }
+
+#fx-activity {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.footer {
+  position: fixed;
+  left: 66px;
+  bottom: 34px;
+  color: #4b596b;
+  font: 11px/1.4 Consolas, "Cascadia Mono", monospace;
+  letter-spacing: .04em;
+}
+
+@media (max-width: 1050px) {
+  #fx-card { left: 74vw; width: 34vw; }
+  #state-name { font-size: 54px; }
+}

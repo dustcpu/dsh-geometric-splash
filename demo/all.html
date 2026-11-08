@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dsh-splash · state gallery</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #080b11; color: #eef3fa; font-family: "Microsoft YaHei", "Segoe UI", sans-serif; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 0%, rgba(100, 130, 180, .11), transparent 45%); }
+  header { padding: 28px 34px 10px; }
+  h1 { margin: 0; font-size: 24px; font-weight: 300; letter-spacing: -.01em; }
+  header p { margin: 7px 0 0; color: #6f7e92; font-size: 12px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 225px;
+    gap: 14px;
+    padding: 16px 34px 24px;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #242e3e;
+    border-radius: 14px;
+    background: #0b0f16;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .25);
+  }
+  .tile iframe { display: block; width: 100%; height: 100%; border: 0; }
+  .tile .meta {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    pointer-events: none;
+    font: 10px/1.3 Consolas, "Cascadia Mono", monospace;
+    color: #6d7f95;
+  }
+  .tile .meta strong { color: #d8e4f2; font-weight: 500; }
+  .hint { position: fixed; right: 34px; bottom: 8px; color: #4c5b6f; font: 10px/1.2 Consolas, monospace; }
+  @media (max-width: 1000px) {
+    .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 260px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>dsh-splash · state gallery</h1>
+    <p>真实 client bundle · 七个状态 + 状态切换同屏 · 标记 2.2× · 建议 1440×900 录屏</p>
+  </header>
+  <main class="grid">
+    <section class="tile">
+      <iframe src="tile.html?state=idle" title="idle"></iframe>
+      <div class="meta"><strong>IDLE</strong><span>主题色 · 无叠加</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=thinking" title="thinking"></iframe>
+      <div class="meta"><strong>THINKING</strong><span>短高光沿外缘 · 2.4s</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=waiting" title="waiting"></iframe>
+      <div class="meta"><strong>WAITING</strong><span>整圈白边呼吸 · 2.6s</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=read" title="read"></iframe>
+      <div class="meta"><strong>READ</strong><span>右边整边呼吸 · 3.2s</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=search" title="search"></iframe>
+      <div class="meta"><strong>SEARCH</strong><span>逐边亮起 · 2.4s/轮</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=act" title="act"></iframe>
+      <div class="meta"><strong>ACT</strong><span>整圈高光 · 1.2s/圈</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=edit" title="edit"></iframe>
+      <div class="meta"><strong>EDIT</strong><span>循环翻转 180° · 保持后翻回</span></div>
+    </section>
+    <section class="tile">
+      <iframe src="tile.html?state=idle&transition=1" title="state transition"></iframe>
+      <div class="meta"><strong>STATE SWITCH</strong><span>idle → … → edit · 2.6s each</span></div>
+    </section>
+  </main>
+  <div class="hint">all seven states isolated in iframes; real bundle; no production UI is touched</div>
+</body>
+</html>

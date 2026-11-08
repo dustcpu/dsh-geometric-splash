@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.6 — 2026-11-08
+
+- **The palette set is twelve now.** Two existing palettes were rebuilt and
+  renamed: `teal-frame` is 「沙漠绿洲」 / Desert Oasis, pulled toward the mint,
+  coral and blue-violet of MV3 Ch07 L07_14 instead of repeating 荷塘晓色's
+  cream/teal family; `dark-room` is 「彩阶流光」 / Prism Flow, built from the
+  orange/magenta/blue geometry of L04_18. `peach-lime` (「蜜桃青柠」 / Peach
+  Lime) and `sakura-dream` (「樱花遗梦」 / Sakura Dream) are new.
+- **The new palettes were tuned twice against the references.** Desert Oasis
+  moved off its first cream/cyan/green version because it sat too close to
+  Lotus Dawn; Peach Lime dropped the fluorescent mint/yellow for the softer
+  pink / cream / mint / periwinkle of Ch07 L07_10; Sakura Dream lost its blue
+  face and blue-grey sea, becoming dark plum + cherry pink.
+- **Edit now loops its turn-over.** The one-shot 180° flip finished long before
+  a recording started, so the edit state looked identical to idle. It now turns
+  over, holds, and returns on a 5.6s loop.
+- **A recording gallery was added under `demo/`** (not included in the npm
+  package): `demo/all.html` shows all seven states and the state switch at once,
+  using the real client bundle at 2.2× for screen capture.
+
 ## 0.2.5 — 2026-11-07
 
 - **The resident mark now reports seven states.** `questions` gets its own

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dsh-splash · tile</title>
+<link rel="stylesheet" href="tile.css">
+</head>
+<body>
+  <div id="tile-state">STATE</div>
+  <div id="fx-card">
+    <div id="fx-editor" contenteditable="true">dsh-splash</div>
+    <button id="fx-model" aria-label="选择模型，当前 DeepSeek-V4.1-Flash，推理等级 High">DeepSeek-V4.1-Flash · High</button>
+  </div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      window.DEMO_STATE = params.get('state') || 'read';
+      window.DEMO_TRANSITION = params.get('transition') === '1';
+      /* The resident mark deliberately hides below 880px. Each gallery tile is
+         narrower than that, so present the tile's internal viewport as wide
+         enough while keeping its fixed layout at the real size. */
+      try {
+        Object.defineProperty(window, 'innerWidth', {
+          configurable: true,
+          get: function () { return 1000; }
+        });
+      } catch (error) {}
+    })();
+  </script>
+  <script src="harness.js"></script>
+</body>
+</html>
