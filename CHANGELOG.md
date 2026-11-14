@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.3.0 — 2026-11-14
+
+- **The palette set is sixteen, and it is grouped by colour instead of by hour.**
+  Four new entries: 「雾隐白塔」 / Misty White Tower, 「灰烬之海」 / Ash Sea,
+  「紫黛流岚」 / Violet Mist and 「浮光错影」 / Shimmer. Morning / Noon / Dusk /
+  Night never fitted: Sakura Dream is the darkest palette in the set and sat
+  under Dusk, while Shimmer is the brightest and sat under Night. The sixteen now
+  split on measured hue and luminance — 清澄 (cool blue/green), 温煦 (warm
+  amber/red), 绮丽 (pink/violet) and 幽玄 (the four near-black grounds), four
+  each. Two names changed with the regroup: 「深紫青绿」 is now 「紫黛流岚」,
+  「橙黄紫晶」 is now 「浮光错影」. IDs are unchanged, so saved choices survive.
+- **The theme dock became a radial menu.** Four orbs stand for the four groups.
+  Opening one slides that orb to the middle of the panel and fans four bars over
+  a 90° wedge at 22.5° spacing; the other three orbs fade out so nothing sits
+  under the bars. Everything below the picker — intro length, both switches,
+  preview, version row, reset — collapses while a fan is open. Keeping them
+  clickable was not harmless: 「预览开屏」 hides the panel and replays the intro
+  full-screen, which left the panel invisible under its own backdrop blur.
+- **Hovering a bar previews the palette, and the switch is no longer a hard cut.**
+  CSS custom properties cannot animate, so the background, the frame, the
+  enlarged preview triangle and the sea canvas each carry their own transition.
+  The canvas is painted frame by frame outside the cascade, so it lerps its three
+  tile stops on its own clock for the same 360ms.
+- **Each group card draws an infinity while hovered.** Closed, a card is just its
+  name, centred. On hover the name drops 21px and a single-stroke ♾ traces
+  itself in 780ms; leaving retracts it over 980ms. Each group has its own
+  highlight colour — 清澄 blue, 温煦 gold, 绮丽 pink, 幽玄 violet — so the four
+  cards never read as one. An open group keeps the glyph lit without the cursor.
+- **One triangle on screen, not two.** The enlarged preview used to fade in
+  beside the resident mark, so both were visible at once. The resident mark now
+  flies to the panel edge itself, scales 2.87×, and keeps turning during the
+  trip; closing the fan sends it home.
+- **Fixed: two palettes lit at once at the hub.** A 22.5° wedge is only ~11px
+  wide at the radius where the bars start, while a bar is 22px, so the pointer
+  sat inside two of them and both matched `:hover`. The dock resolves the wedge
+  by cursor angle and only that bar answers.
+- **Fixed: hover flickered at the hub.** Lifting a bar moved it out from under
+  the cursor, which fired `mouseleave` and dropped it back onto the pointer. The
+  hit area and the painted bar are now separate elements; the target never moves.
+- **Fixed: the bars sat on the group card.** The fan anchor moved from 29px to
+  43px out, clear of the 78px card and its confirm row.
+- **「开屏后留在界面」 is now 「三角标记常驻输入框旁」** — the old label never said
+  what stays or where. English reads "Keep the triangle beside the composer".
+
 ## 0.2.6 — 2026-11-08
 
 - **The palette set is twelve now.** Two existing palettes were rebuilt and
